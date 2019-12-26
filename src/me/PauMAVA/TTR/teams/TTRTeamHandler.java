@@ -56,6 +56,15 @@ public class TTRTeamHandler {
         return true;
     }
 
+    public TTRTeam getPlayerTeam(Player player) {
+        for(TTRTeam team: this.teams) {
+            if(team.getPlayers().contains(player)) {
+                return team;
+            }
+        }
+        return null;
+    }
+
     private TTRTeam getTeam(String teamIdentifier) {
         for(TTRTeam team: this.teams) {
             if(team.getIdentifier().equalsIgnoreCase(teamIdentifier)) {

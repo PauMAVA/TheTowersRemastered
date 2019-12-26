@@ -22,7 +22,9 @@ import org.bukkit.ChatColor;
 
 public enum TTRPrefix {
 
-    TTR_GAME(ChatColor.GRAY + "" + ChatColor.BOLD + "[" + ChatColor.RESET + ChatColor.GREEN + "" + ChatColor.BOLD + "The Towers" + ChatColor.RESET + ChatColor.GRAY + "" + ChatColor.BOLD + "]" + ChatColor.RESET + " ");
+    TTR_GAME(ChatColor.GRAY + "" + ChatColor.BOLD + "[" + ChatColor.RESET + ChatColor.GREEN + "" + ChatColor.BOLD + "The Towers" + ChatColor.RESET + ChatColor.GRAY + "" + ChatColor.BOLD + "]" + ChatColor.RESET + " "),
+    TTR_GLOBAL(ChatColor.GRAY + "" + ChatColor.BOLD + "[" + ChatColor.RESET + ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "GLOBAL" + ChatColor.RESET + ChatColor.GRAY + "" + ChatColor.BOLD + "]" + ChatColor.RESET + " "),
+    TTR_TEAM(ChatColor.GRAY + "" + ChatColor.BOLD + "[" + ChatColor.RESET + ChatColor.GREEN + "" + ChatColor.BOLD + "TEAM" + ChatColor.RESET + ChatColor.GRAY + "" + ChatColor.BOLD + "]" + ChatColor.RESET + " ");
 
     private String prefix;
 

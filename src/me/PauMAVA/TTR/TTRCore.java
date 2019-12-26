@@ -18,6 +18,7 @@
 package me.PauMAVA.TTR;
 
 import me.PauMAVA.TTR.match.TTRMatch;
+import me.PauMAVA.TTR.teams.TTRTeamHandler;
 import me.PauMAVA.TTR.util.EventListener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -26,14 +27,17 @@ public class TTRCore extends JavaPlugin {
     private static TTRCore instance;
     private boolean enabled = false;
     private TTRMatch match;
+    private TTRTeamHandler teamHandler;
 
     @Override
     public void onEnable() {
         instance = this;
-        if(this.getConfig().getBoolean("enableOnStart")) {
+        if (this.getConfig().getBoolean("enableOnStart")) {
             enabled = true;
         }
         this.match = new TTRMatch();
+        this.teamHandler = new TTRTeamHandler();
+        this.teamHandler.setUpDefaultTeams();
         this.getServer().getPluginManager().registerEvents(new EventListener(), this);
     }
 
@@ -52,5 +56,9 @@ public class TTRCore extends JavaPlugin {
 
     public TTRMatch getCurrentMatch() {
         return this.match;
+    }
+
+    public TTRTeamHandler getTeamHandler() {
+        return this.teamHandler;
     }
 }
