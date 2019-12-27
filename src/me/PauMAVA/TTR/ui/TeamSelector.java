@@ -19,20 +19,44 @@
 package me.PauMAVA.TTR.ui;
 
 import me.PauMAVA.TTR.TTRCore;
+import me.PauMAVA.TTR.teams.TTRTeam;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.Item;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
-public class TeamSelector extends CustomUI {
+public class TeamSelector extends CustomUI implements Listener {
 
     private Player owner;
     private int selected = -1;
+    private String lastTeam;
 
     public TeamSelector(Player player) {
         super(27, "Team Selection");
         this.owner = player;
         setUp();
+        TTRCore.getInstance().getServer().getPluginManager().registerEvents(this, TTRCore.getInstance());
+        TTRTeam possibleTeam = TTRCore.getInstance().getTeamHandler().getPlayerTeam(this.owner);
+        if(possibleTeam != null) {
+            for(int i = 0; i < super.getInventory().getSize(); i++) {
+                ItemStack stack = super.getInventory().getItem(i);
+                if(stack != null) {
+                    String cleanName = ChatColor.stripColor(stack.getItemMeta().getDisplayName());
+                    if(possibleTeam.getIdentifier().equalsIgnoreCase(cleanName)) {
+                        this.selected = i;
+                        addEnchantment(i);
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     public void openSelector() {
@@ -49,6 +73,33 @@ public class TeamSelector extends CustomUI {
             setSlot(i, new ItemStack(Material.valueOf(TTRCore.getInstance().getConfigManager().getTeamColor(teamName).name() + "_WOOL"), 1), TTRCore.getInstance().getConfigManager().getTeamColor(teamName) + teamName, null);
             i++;
         }
+    }
+
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent event) {
+        if(event.getClickedInventory() == super.getInventory() && event.getClickedInventory().getItem(event.getSlot()) != null) {
+            this.selected = event.getSlot();
+            setUp();
+            addEnchantment(this.selected);
+            String teamName = super.getInventory().getItem(this.selected).getItemMeta().getDisplayName();
+            TTRCore.getInstance().getTeamHandler().addPlayer(teamName, this.owner);
+            if(lastTeam != null) {
+                TTRCore.getInstance().getTeamHandler().removePlayer(teamName, this.owner);
+            }
+            this.lastTeam = teamName;
+        }
+        if(TTRCore.getInstance().enabled() && !TTRCore.getInstance().getCurrentMatch().isOnCourse()) {
+            event.setCancelled(true);
+        }
+    }
+
+    private void addEnchantment(int slot) {
+        ItemStack selectedItem = super.getInventory().getItem(this.selected);
+        selectedItem.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+        ItemMeta meta = selectedItem.getItemMeta();
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        selectedItem.setItemMeta(meta);
+        super.setSlot(slot, selectedItem, null, null);
     }
 
 }

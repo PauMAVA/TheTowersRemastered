@@ -18,5 +18,60 @@
 
 package me.PauMAVA.TTR.match;
 
+import me.PauMAVA.TTR.TTRCore;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.entity.EntityType;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.Material;
+
+import java.util.List;
+
 public class LootSpawner {
+
+    private List<Location> ironLocations;
+    private List<Location> xpLocations;
+    private long ironFrequency = 150;
+    private long xpFrequency = 150;
+    private int ironTaskPID;
+    private int xpTaskPID;
+
+    public LootSpawner() {
+        this.ironLocations = TTRCore.getInstance().getConfigManager().getIronSpawns();
+        this.xpLocations = TTRCore.getInstance().getConfigManager().getXPSpawns();
+    }
+
+    public void startSpawning() {
+        setIronTask();
+        setXpTask();
+    }
+
+    public void stopSpawning() {
+        Bukkit.getScheduler().cancelTask(this.ironTaskPID);
+        Bukkit.getScheduler().cancelTask(this.xpTaskPID);
+    }
+
+    private void setIronTask() {
+        this.ironTaskPID = new BukkitRunnable(){
+            @Override
+            public void run() {
+                for(Location location: ironLocations) {
+                    location.getWorld().dropItem(location, new ItemStack(Material.IRON_INGOT, 1));
+                }
+            }
+        }.runTaskTimer(TTRCore.getInstance(), 0L, this.ironFrequency).getTaskId();
+    }
+
+    private void setXpTask() {
+        this.xpTaskPID = new BukkitRunnable(){
+            @Override
+            public void run() {
+                for(Location location: xpLocations) {
+                    location.getWorld().spawnEntity(location, EntityType.THROWN_EXP_BOTTLE);
+                }
+            }
+        }.runTaskTimer(TTRCore.getInstance(), 0L, this.xpFrequency).getTaskId();
+    }
+
 }

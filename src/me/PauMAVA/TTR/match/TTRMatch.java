@@ -18,9 +18,16 @@
 
 package me.PauMAVA.TTR.match;
 
+import me.PauMAVA.TTR.TTRCore;
+import me.PauMAVA.TTR.teams.TTRTeam;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+
 public class TTRMatch {
 
     private MatchStatus status;
+    private LootSpawner lootSpawner;
+    private CageChecker checker;
 
     public TTRMatch(MatchStatus initialStatus) {
         status = initialStatus;
@@ -32,10 +39,23 @@ public class TTRMatch {
 
     public void startMatch() {
         this.status = MatchStatus.INGAME;
+        this.lootSpawner = new LootSpawner();
+        this.checker = new CageChecker();
+        this.checker.setCages(TTRCore.getInstance().getConfigManager().getTeamCages(), 2);
+        this.checker.startChecking();
+        this.lootSpawner.startSpawning();
+        for(Player player: Bukkit.getServer().getOnlinePlayers()) {
+            TTRTeam playerTeam = TTRCore.getInstance().getTeamHandler().getPlayerTeam(player);
+            if(playerTeam == null) {
+                continue;
+            }
+            player.teleport(TTRCore.getInstance().getConfigManager().getTeamSpawn(playerTeam.getIdentifier()));
+        }
     }
 
     public void endMatch() {
         this.status = MatchStatus.ENDED;
+        this.lootSpawner.stopSpawning();
     }
 
     public MatchStatus getStatus() {

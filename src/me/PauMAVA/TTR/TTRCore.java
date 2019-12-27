@@ -46,9 +46,9 @@ public class TTRCore extends JavaPlugin {
         } else {
             this.match = new TTRMatch(MatchStatus.DISABLED);
         }
+        this.configManager = new TTRConfigManager(this.getConfig());
         this.teamHandler = new TTRTeamHandler();
         this.teamHandler.setUpDefaultTeams();
-        this.configManager = new TTRConfigManager(this.getConfig());
         this.matchWorld = this.getServer().getWorlds().get(0);
         this.matchWorld.setSpawnLocation(this.configManager.getLobbyLocation());
         this.getServer().getPluginManager().registerEvents(new EventListener(), this);

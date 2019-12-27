@@ -58,13 +58,6 @@ public class EventListener implements Listener {
     }
 
     @EventHandler
-    public void onInventoryClick(InventoryClickEvent event) {
-        if(TTRCore.getInstance().enabled() && !TTRCore.getInstance().getCurrentMatch().isOnCourse()) {
-            event.setCancelled(true);
-        }
-    }
-
-    @EventHandler
     public void onPlayerDropEvent(PlayerDropItemEvent event) {
         if(TTRCore.getInstance().enabled() && !TTRCore.getInstance().getCurrentMatch().isOnCourse()) {
             event.setCancelled(true);

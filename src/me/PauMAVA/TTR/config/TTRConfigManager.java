@@ -24,10 +24,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class TTRConfigManager {
 
@@ -107,6 +104,14 @@ public class TTRConfigManager {
         return getTeam(teamName).getLocation("cage");
     }
 
+    public List<Location> getTeamCages() {
+        List<Location> cages = new ArrayList<Location>();
+        for(String teamName: getTeamNames()) {
+            cages.add(getTeamCage(teamName));
+        }
+        return cages;
+    }
+
     private void saveConfig() {
         TTRCore.getInstance().saveConfig();
     }
@@ -123,8 +128,8 @@ public class TTRConfigManager {
         matchSection.addDefault("maxhealth", 20);
         this.mapSection = this.configuration.createSection("map");
         mapSection.addDefault("lobby", new Location(this.world, 1, 207, 1010));
-        mapSection.addDefault("ironspawns", new ArrayList<Location>(Arrays.asList(new Location(this.world, 0,207, 1138))));
-        mapSection.addDefault("xpspawns", new ArrayList<Location>(Arrays.asList(new Location(this.world, 0, 207, 1666))));
+        mapSection.addDefault("ironspawns", new ArrayList<Location>(Arrays.asList(new Location(this.world, 0,203, 1138))));
+        mapSection.addDefault("xpspawns", new ArrayList<Location>(Arrays.asList(new Location(this.world, 0, 203, 1166))));
         this.teamsSection = this.configuration.createSection("teams");
         ConfigurationSection team1section = teamsSection.createSection("team1");
         ConfigurationSection team2section = teamsSection.createSection("team2");

@@ -20,6 +20,8 @@ package me.PauMAVA.TTR.ui;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -28,7 +30,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class CustomUI {
+public abstract class CustomUI {
 
     private Inventory inventory;
     private String title;
@@ -69,5 +71,12 @@ public class CustomUI {
     public void clearUI() {
         this.inventory.clear();
     }
+
+    public Inventory getInventory() {
+        return this.inventory;
+    }
+
+    @EventHandler
+    abstract void onInventoryClick(InventoryClickEvent event);
 
 }

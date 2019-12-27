@@ -20,6 +20,8 @@ package me.PauMAVA.TTR.teams;
 
 import me.PauMAVA.TTR.TTRCore;
 import me.PauMAVA.TTR.match.TTRMatch;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -31,12 +33,9 @@ public class TTRTeamHandler {
     private List<TTRTeam> teams = new ArrayList<TTRTeam>();
 
     public void setUpDefaultTeams() {
-        teams.add(new TTRTeam("red"));
-        teams.add(new TTRTeam("blue"));
-    }
-
-    public void setUpCustomTeams(List<TTRTeam> customTeams) {
-        this.teams = customTeams;
+        for(String team: TTRCore.getInstance().getConfigManager().getTeamNames()) {
+            this.teams.add(new TTRTeam(team));
+        }
     }
 
     public boolean addPlayerToTeam(Player player, String teamIdentifier) {
@@ -68,10 +67,19 @@ public class TTRTeamHandler {
 
     private TTRTeam getTeam(String teamIdentifier) {
         for(TTRTeam team: this.teams) {
-            if(team.getIdentifier().equalsIgnoreCase(teamIdentifier)) {
+            teamIdentifier = ChatColor.stripColor(teamIdentifier);
+            if(teamIdentifier.contentEquals(team.getIdentifier())) {
                 return team;
             }
         }
         return null;
+    }
+
+    public void addPlayer(String teamIdentifier, Player player) {
+        getTeam(teamIdentifier).addPlayer(player);
+    }
+
+    public void removePlayer(String teamIdentifier, Player player) {
+        getTeam(teamIdentifier).removePlayer(player);
     }
 }
