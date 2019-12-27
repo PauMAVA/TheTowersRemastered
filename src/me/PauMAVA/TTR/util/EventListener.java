@@ -19,6 +19,7 @@
 package me.PauMAVA.TTR.util;
 
 import me.PauMAVA.TTR.TTRCore;
+import me.PauMAVA.TTR.match.MatchStatus;
 import me.PauMAVA.TTR.ui.TeamSelector;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -39,15 +40,21 @@ public class EventListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         if(TTRCore.getInstance().enabled()) {
-            Inventory playerInventory = event.getPlayer().getInventory();
-            playerInventory.clear();
-            playerInventory.setItem(0, new ItemStack(Material.BLACK_BANNER));
+            event.setJoinMessage(TTRPrefix.TTR_GAME + "" + ChatColor.GREEN + "+ " + ChatColor.GRAY + event.getPlayer().getName() + " has joined the game");
+            if(TTRCore.getInstance().getCurrentMatch().getStatus() == MatchStatus.PREGAME) {
+                Inventory playerInventory = event.getPlayer().getInventory();
+                playerInventory.clear();
+                playerInventory.setItem(0, new ItemStack(Material.BLACK_BANNER));
+                event.getPlayer().teleport(TTRCore.getInstance().getConfigManager().getLobbyLocation());
+            }
         }
     }
 
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event) {
-
+        if(TTRCore.getInstance().enabled()) {
+            event.setQuitMessage(TTRPrefix.TTR_GAME + "" + ChatColor.RED + "- " + ChatColor.GRAY + event.getPlayer().getName() + " has left the game");
+        }
     }
 
     @EventHandler

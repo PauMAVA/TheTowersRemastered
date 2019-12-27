@@ -18,6 +18,7 @@
 
 package me.PauMAVA.TTR.teams;
 
+import me.PauMAVA.TTR.TTRCore;
 import me.PauMAVA.TTR.match.TTRMatch;
 import org.bukkit.entity.Player;
 
@@ -26,7 +27,7 @@ import java.util.List;
 
 public class TTRTeamHandler {
 
-    private TTRMatch match = new TTRMatch();
+    private TTRMatch match = TTRCore.getInstance().getCurrentMatch();
     private List<TTRTeam> teams = new ArrayList<TTRTeam>();
 
     public void setUpDefaultTeams() {

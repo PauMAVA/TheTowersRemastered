@@ -17,10 +17,13 @@
  */
 package me.PauMAVA.TTR;
 
+import me.PauMAVA.TTR.commands.StartMatchCommand;
 import me.PauMAVA.TTR.config.TTRConfigManager;
+import me.PauMAVA.TTR.match.MatchStatus;
 import me.PauMAVA.TTR.match.TTRMatch;
 import me.PauMAVA.TTR.teams.TTRTeamHandler;
 import me.PauMAVA.TTR.util.EventListener;
+import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class TTRCore extends JavaPlugin {
@@ -30,6 +33,7 @@ public class TTRCore extends JavaPlugin {
     private TTRMatch match;
     private TTRTeamHandler teamHandler;
     private TTRConfigManager configManager;
+    private World matchWorld;
 
     @Override
     public void onEnable() {
@@ -37,11 +41,18 @@ public class TTRCore extends JavaPlugin {
         if (this.getConfig().getBoolean("enableOnStart")) {
             enabled = true;
         }
-        this.match = new TTRMatch();
+        if(enabled) {
+            this.match = new TTRMatch(MatchStatus.PREGAME);
+        } else {
+            this.match = new TTRMatch(MatchStatus.DISABLED);
+        }
         this.teamHandler = new TTRTeamHandler();
         this.teamHandler.setUpDefaultTeams();
         this.configManager = new TTRConfigManager(this.getConfig());
+        this.matchWorld = this.getServer().getWorlds().get(0);
+        this.matchWorld.setSpawnLocation(this.configManager.getLobbyLocation());
         this.getServer().getPluginManager().registerEvents(new EventListener(), this);
+        this.getCommand("ttrstart").setExecutor(new StartMatchCommand());
     }
 
     @Override
@@ -67,5 +78,9 @@ public class TTRCore extends JavaPlugin {
 
     public TTRConfigManager getConfigManager() {
         return this.configManager;
+    }
+
+    public World getMatchWorld() {
+        return this.matchWorld;
     }
 }

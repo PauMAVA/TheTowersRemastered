@@ -18,28 +18,5 @@
 
 package me.PauMAVA.TTR.match;
 
-public class TTRMatch {
-
-    private MatchStatus status;
-
-    public TTRMatch(MatchStatus initialStatus) {
-        status = initialStatus;
-    }
-
-    public boolean isOnCourse() {
-        return this.status == MatchStatus.INGAME;
-    }
-
-    public void startMatch() {
-        this.status = MatchStatus.INGAME;
-    }
-
-    public void endMatch() {
-        this.status = MatchStatus.ENDED;
-    }
-
-    public MatchStatus getStatus() {
-        return this.status;
-    }
-
+public class LootSpawner {
 }
