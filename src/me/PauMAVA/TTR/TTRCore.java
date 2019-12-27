@@ -26,7 +26,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class TTRCore extends JavaPlugin {
 
     private static TTRCore instance;
-    private boolean enabled = false;
+    private boolean enabled = true;
     private TTRMatch match;
     private TTRTeamHandler teamHandler;
     private TTRConfigManager configManager;
@@ -63,5 +63,9 @@ public class TTRCore extends JavaPlugin {
 
     public TTRTeamHandler getTeamHandler() {
         return this.teamHandler;
+    }
+
+    public TTRConfigManager getConfigManager() {
+        return this.configManager;
     }
 }

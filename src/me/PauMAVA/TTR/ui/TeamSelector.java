@@ -18,15 +18,21 @@
 
 package me.PauMAVA.TTR.ui;
 
+import me.PauMAVA.TTR.TTRCore;
+import org.bukkit.Material;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public class TeamSelector extends CustomUI {
 
     private Player owner;
+    private int selected = -1;
 
     public TeamSelector(Player player) {
         super(27, "Team Selection");
         this.owner = player;
+        setUp();
     }
 
     public void openSelector() {
@@ -35,6 +41,14 @@ public class TeamSelector extends CustomUI {
 
     public void closeSelector() {
         super.closeUI(this.owner);
+    }
+
+    public void setUp() {
+        int i = 0;
+        for(String teamName: TTRCore.getInstance().getConfigManager().getTeamNames()) {
+            setSlot(i, new ItemStack(Material.valueOf(TTRCore.getInstance().getConfigManager().getTeamColor(teamName).name() + "_WOOL"), 1), TTRCore.getInstance().getConfigManager().getTeamColor(teamName) + teamName, null);
+            i++;
+        }
     }
 
 }

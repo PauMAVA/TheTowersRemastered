@@ -27,6 +27,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 public class TTRConfigManager {
 
@@ -79,6 +80,10 @@ public class TTRConfigManager {
 
     public int getTeamCount() {
         return this.teamsSection.getKeys(false).size();
+    }
+
+    public Set<String> getTeamNames() {
+        return this.teamsSection.getKeys(false);
     }
 
     private ConfigurationSection getTeam(String teamName) {
