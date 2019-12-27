@@ -17,6 +17,7 @@
  */
 package me.PauMAVA.TTR;
 
+import me.PauMAVA.TTR.config.TTRConfigManager;
 import me.PauMAVA.TTR.match.TTRMatch;
 import me.PauMAVA.TTR.teams.TTRTeamHandler;
 import me.PauMAVA.TTR.util.EventListener;
@@ -28,6 +29,7 @@ public class TTRCore extends JavaPlugin {
     private boolean enabled = false;
     private TTRMatch match;
     private TTRTeamHandler teamHandler;
+    private TTRConfigManager configManager;
 
     @Override
     public void onEnable() {
@@ -38,6 +40,7 @@ public class TTRCore extends JavaPlugin {
         this.match = new TTRMatch();
         this.teamHandler = new TTRTeamHandler();
         this.teamHandler.setUpDefaultTeams();
+        this.configManager = new TTRConfigManager(this.getConfig());
         this.getServer().getPluginManager().registerEvents(new EventListener(), this);
     }
 

@@ -25,11 +25,8 @@ import io.netty.channel.ChannelPromise;
 import me.PauMAVA.TTR.TTRCore;
 import me.PauMAVA.TTR.chat.TTRChatManager;
 import net.minecraft.server.v1_15_R1.PacketPlayInChat;
-import net.minecraft.server.v1_15_R1.PacketPlayOutChat;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
-
-import java.lang.reflect.Field;
 
 public class PacketIntercepter {
 
@@ -43,7 +40,7 @@ public class PacketIntercepter {
                 try{
                     super.channelRead(context, packet);
                 } catch (Exception e) {
-                    TTRCore.getInstance().getLogger().warning("An error occured on packet reading process!");
+                    TTRCore.getInstance().getLogger().warning("An error occurred on packet reading process!");
                     e.printStackTrace();
                 }
             }
