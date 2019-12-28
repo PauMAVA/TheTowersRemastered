@@ -18,7 +18,9 @@
 
 package me.PauMAVA.TTR.ui;
 
+import io.netty.handler.codec.DecoderException;
 import me.PauMAVA.TTR.util.TTRPrefix;
+import net.minecraft.server.v1_15_R1.ChatComponentText;
 import net.minecraft.server.v1_15_R1.PacketPlayOutPlayerListHeaderFooter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -30,9 +32,9 @@ import java.lang.reflect.Field;
 
 public class TTRCustomTab extends BukkitRunnable {
 
-    private String prefix;
+    private String prefix = "";
     private String suffix = ChatColor.AQUA + "(c) 2019-2020" + ChatColor.BOLD + " PauMAVA" + ChatColor.RESET + "\n" + ChatColor.GREEN + "The Towers Remastered (TTR)";
-    private int i;
+    private int i = 1;
 
     @Override
     public void run() {
@@ -63,12 +65,12 @@ public class TTRCustomTab extends BukkitRunnable {
             Field footer = packet.getClass().getDeclaredField("footer");
             header.setAccessible(true);
             footer.setAccessible(true);
-            header.set(packet, this.prefix);
-            footer.set(packet, this.suffix);
+            header.set(packet, new ChatComponentText(this.prefix));
+            footer.set(packet, new ChatComponentText(this.suffix));
             for(Player player: Bukkit.getServer().getOnlinePlayers()) {
                 ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
             }
-        } catch (IllegalAccessException | NoSuchFieldException e) {
+        } catch (IllegalAccessException | NoSuchFieldException | DecoderException e) {
             e.printStackTrace();
         }
     }

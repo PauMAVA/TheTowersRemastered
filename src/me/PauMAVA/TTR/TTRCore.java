@@ -19,6 +19,7 @@ package me.PauMAVA.TTR;
 
 import me.PauMAVA.TTR.commands.StartMatchCommand;
 import me.PauMAVA.TTR.config.TTRConfigManager;
+import me.PauMAVA.TTR.match.LootSpawner;
 import me.PauMAVA.TTR.match.MatchStatus;
 import me.PauMAVA.TTR.match.TTRMatch;
 import me.PauMAVA.TTR.teams.TTRTeamHandler;

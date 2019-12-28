@@ -21,6 +21,9 @@ package me.PauMAVA.TTR.match;
 import me.PauMAVA.TTR.TTRCore;
 import me.PauMAVA.TTR.teams.TTRTeam;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 public class TTRMatch {
@@ -44,18 +47,30 @@ public class TTRMatch {
         this.checker.setCages(TTRCore.getInstance().getConfigManager().getTeamCages(), 2);
         this.checker.startChecking();
         this.lootSpawner.startSpawning();
+        TTRCore.getInstance().getScoreboard().startScoreboardTask();
         for(Player player: Bukkit.getServer().getOnlinePlayers()) {
             TTRTeam playerTeam = TTRCore.getInstance().getTeamHandler().getPlayerTeam(player);
             if(playerTeam == null) {
                 continue;
             }
             player.teleport(TTRCore.getInstance().getConfigManager().getTeamSpawn(playerTeam.getIdentifier()));
+            player.setGameMode(GameMode.SURVIVAL);
+            player.setHealth(TTRCore.getInstance().getConfigManager().getMaxHealth());
+            player.setFoodLevel(20);
+            player.setSaturation(20);
         }
     }
 
-    public void endMatch() {
+    public void endMatch(TTRTeam team) {
         this.status = MatchStatus.ENDED;
         this.lootSpawner.stopSpawning();
+        TTRCore.getInstance().getScoreboard().stopScoreboardTask();
+        for(Player player: Bukkit.getServer().getOnlinePlayers()) {
+            player.setGameMode(GameMode.SPECTATOR);
+            ChatColor teamColor = TTRCore.getInstance().getConfigManager().getTeamColor(team.getIdentifier());
+            player.sendTitle(teamColor + "" + ChatColor.BOLD + team.getIdentifier(), ChatColor.AQUA + "WINS!", 10, 100, 20);
+            player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 10, 1);
+        }
     }
 
     public MatchStatus getStatus() {

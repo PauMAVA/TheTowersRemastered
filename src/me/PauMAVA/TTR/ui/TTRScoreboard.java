@@ -15,6 +15,7 @@ public class TTRScoreboard {
     private Objective kills;
     private Objective health;
     private Objective points;
+    private Score totalTime;
     private int taskPID;
 
     public TTRScoreboard() {
@@ -23,7 +24,7 @@ public class TTRScoreboard {
         this.kills.setDisplaySlot(DisplaySlot.PLAYER_LIST);
         this.health = this.ttrScoreboard.registerNewObjective("health", "HEALTH", "Health", RenderType.HEARTS);
         this.health.setDisplaySlot(DisplaySlot.BELOW_NAME);
-        this.points = this.ttrScoreboard.registerNewObjective("points", "DUMMY", "Points");
+        this.points = this.ttrScoreboard.registerNewObjective("points", "DUMMY", ChatColor.AQUA + "" + ChatColor.BOLD + "Points");
         this.points.setDisplaySlot(DisplaySlot.SIDEBAR);
     }
 
@@ -45,17 +46,34 @@ public class TTRScoreboard {
             @Override
             public void run() {
                 for(TTRTeam team: TTRCore.getInstance().getTeamHandler().getTeams()) {
-                    points.getScore(team.getIdentifier()).setScore(team.getPoints());
+                    ChatColor teamColor = TTRCore.getInstance().getConfigManager().getTeamColor(team.getIdentifier());
+                    points.getScore(teamColor + "" + ChatColor.BOLD + team.getIdentifier()).setScore(team.getPoints());
                 }
-                points.getScore("------------------").setScore(-1);
-                points.getScore(ChatColor.GREEN + "Total time: ").setScore(-2);
+                points.getScore(ChatColor.DARK_GRAY + "§m                         ").setScore(-1);
+                if(totalTime != null) {
+                    ttrScoreboard.resetScores(totalTime.getEntry());
+                }
+                totalTime = points.getScore(ChatColor.GREEN + "" + ChatColor.BOLD + "Total time: " + ChatColor.GRAY + prettyTime(i));
+                totalTime.setScore(-2);
                 i++;
             }
 
-            private void prettyTime(int i) {
-
+            private String prettyTime(int i) {
+                String elapsedMinutes, elapsedSeconds;
+                if((((i % 86400) % 3600) / 60) < 10) {
+                    elapsedMinutes = "0" + ((i % 86400) % 3600) / 60;
+                } else {
+                    elapsedMinutes = "" + ((i % 86400) % 3600) / 60;
+                }
+                if((((i % 86400) % 3600) % 60) < 10) {
+                    elapsedSeconds = "0" + ((i % 86400) % 3600) % 60;
+                } else {
+                    elapsedSeconds = "" + ((i % 86400) % 3600) % 60;
+                }
+                return (i % 86400) / 3600 + ":" + elapsedMinutes + ":" + elapsedSeconds;
             }
         }.runTaskTimer(TTRCore.getInstance(), 0L, 20L).getTaskId();
+        refreshScoreboard();
     }
 
     public void stopScoreboardTask() {

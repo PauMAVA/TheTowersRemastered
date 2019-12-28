@@ -18,6 +18,7 @@
 
 package me.PauMAVA.TTR.match;
 
+import me.PauMAVA.TTR.teams.TTRTeam;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -27,10 +28,12 @@ public class Cage {
 
     private Location location;
     private int effectiveRadius;
+    private TTRTeam owner;
 
-    public Cage(Location location, int effectiveRadius) {
+    public Cage(Location location, int effectiveRadius, TTRTeam owner) {
         this.location = location;
         this.effectiveRadius = effectiveRadius;
+        this.owner = owner;
     }
 
     public boolean isInCage(Player player) {
@@ -39,6 +42,10 @@ public class Cage {
 
     public Location getLocation() {
         return this.location;
+    }
+
+    public TTRTeam getOwner() {
+        return this.owner;
     }
 
 }

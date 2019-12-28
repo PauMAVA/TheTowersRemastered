@@ -20,6 +20,7 @@ package me.PauMAVA.TTR.match;
 
 import me.PauMAVA.TTR.TTRCore;
 import me.PauMAVA.TTR.teams.TTRTeam;
+import me.PauMAVA.TTR.ui.TTRScoreboard;
 import me.PauMAVA.TTR.util.TTRPrefix;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -29,6 +30,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class CageChecker {
@@ -46,9 +48,14 @@ public class CageChecker {
                         Location particleLocation = new Location(cage.getLocation().getWorld(), cage.getLocation().getBlockX(), cage.getLocation().getBlockY() + 1, cage.getLocation().getBlockZ());
                         particleLocation.add(particleLocation.getX() > 0 ? 0.5 : -0.5, 0.0, particleLocation.getZ() > 0 ? 0.5 : -0.5);
                         cage.getLocation().getWorld().spawnParticle(Particle.SPELL, particleLocation, 100);
-                        if(cage.isInCage(p)) {
-                            cage.getLocation().getWorld().strikeLightningEffect(cage.getLocation());
-                            playerOnCage(p);
+                        if(cage.isInCage(p) && TTRCore.getInstance().getTeamHandler().getPlayerTeam(p) != null) {
+                            if(cage.getOwner().equals(TTRCore.getInstance().getTeamHandler().getPlayerTeam(p))) {
+                                p.sendMessage(TTRPrefix.TTR_GAME + "" + ChatColor.RED + "You can't do that!");
+                                p.teleport(TTRCore.getInstance().getConfigManager().getTeamSpawn(TTRCore.getInstance().getTeamHandler().getPlayerTeam(p).getIdentifier()));
+                            } else {
+                                cage.getLocation().getWorld().strikeLightningEffect(cage.getLocation());
+                                playerOnCage(p);
+                            }
                         }
                     }
                 }
@@ -64,12 +71,16 @@ public class CageChecker {
         TTRTeam playersTeam = TTRCore.getInstance().getTeamHandler().getPlayerTeam(player);
         player.teleport(TTRCore.getInstance().getConfigManager().getTeamSpawn(playersTeam.getIdentifier()));
         playersTeam.addPoints(1);
+        TTRCore.getInstance().getScoreboard().refreshScoreboard();
         Bukkit.broadcastMessage(TTRPrefix.TTR_GAME + "" + ChatColor.GRAY + player.getName() + " has scored a point!");
+        if(playersTeam.getPoints() >= TTRCore.getInstance().getConfigManager().getMaxPoints()) {
+            TTRCore.getInstance().getCurrentMatch().endMatch(playersTeam);
+        }
     }
 
-    public void setCages(List<Location> cages, int effectiveRadius) {
-        for(Location cage: cages) {
-            this.cages.add(new Cage(cage, effectiveRadius));
+    public void setCages(HashMap<Location, TTRTeam> cages, int effectiveRadius) {
+        for(Location cage: cages.keySet()) {
+            this.cages.add(new Cage(cage, effectiveRadius, cages.get(cage)));
         }
     }
 }
