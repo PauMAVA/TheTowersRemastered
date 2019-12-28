@@ -65,7 +65,7 @@ public class TTRTeamHandler {
         return null;
     }
 
-    private TTRTeam getTeam(String teamIdentifier) {
+    public TTRTeam getTeam(String teamIdentifier) {
         for(TTRTeam team: this.teams) {
             teamIdentifier = ChatColor.stripColor(teamIdentifier);
             if(teamIdentifier.contentEquals(team.getIdentifier())) {
@@ -73,6 +73,10 @@ public class TTRTeamHandler {
             }
         }
         return null;
+    }
+
+    public List<TTRTeam> getTeams() {
+        return this.teams;
     }
 
     public void addPlayer(String teamIdentifier, Player player) {

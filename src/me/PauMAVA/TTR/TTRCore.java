@@ -22,6 +22,8 @@ import me.PauMAVA.TTR.config.TTRConfigManager;
 import me.PauMAVA.TTR.match.MatchStatus;
 import me.PauMAVA.TTR.match.TTRMatch;
 import me.PauMAVA.TTR.teams.TTRTeamHandler;
+import me.PauMAVA.TTR.ui.TTRCustomTab;
+import me.PauMAVA.TTR.ui.TTRScoreboard;
 import me.PauMAVA.TTR.util.EventListener;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -34,6 +36,8 @@ public class TTRCore extends JavaPlugin {
     private TTRTeamHandler teamHandler;
     private TTRConfigManager configManager;
     private World matchWorld;
+    private TTRCustomTab customTab;
+    private TTRScoreboard scoreboard;
 
     @Override
     public void onEnable() {
@@ -41,8 +45,11 @@ public class TTRCore extends JavaPlugin {
         if (this.getConfig().getBoolean("enableOnStart")) {
             enabled = true;
         }
+        this.customTab = new TTRCustomTab();
+        this.scoreboard = new TTRScoreboard();
         if(enabled) {
             this.match = new TTRMatch(MatchStatus.PREGAME);
+            this.customTab.runTaskTimer(this, 0L, 20L);
         } else {
             this.match = new TTRMatch(MatchStatus.DISABLED);
         }
@@ -57,7 +64,8 @@ public class TTRCore extends JavaPlugin {
 
     @Override
     public void onDisable() {
-
+        this.customTab.cancel();
+        this.scoreboard.removeScoreboard();
     }
 
     public static TTRCore getInstance() {
@@ -82,5 +90,9 @@ public class TTRCore extends JavaPlugin {
 
     public World getMatchWorld() {
         return this.matchWorld;
+    }
+
+    public TTRScoreboard getScoreboard() {
+        return scoreboard;
     }
 }
