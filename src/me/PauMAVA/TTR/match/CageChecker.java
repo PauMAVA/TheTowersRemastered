@@ -19,6 +19,7 @@
 package me.PauMAVA.TTR.match;
 
 import me.PauMAVA.TTR.TTRCore;
+import me.PauMAVA.TTR.teams.TTRTeam;
 import me.PauMAVA.TTR.util.TTRPrefix;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -46,8 +47,8 @@ public class CageChecker {
                         particleLocation.add(particleLocation.getX() > 0 ? 0.5 : -0.5, 0.0, particleLocation.getZ() > 0 ? 0.5 : -0.5);
                         cage.getLocation().getWorld().spawnParticle(Particle.SPELL, particleLocation, 100);
                         if(cage.isInCage(p)) {
-                            playerOnCage(p);
                             cage.getLocation().getWorld().strikeLightningEffect(cage.getLocation());
+                            playerOnCage(p);
                         }
                     }
                 }
@@ -60,6 +61,9 @@ public class CageChecker {
     }
 
     private void playerOnCage(Player player) {
+        TTRTeam playersTeam = TTRCore.getInstance().getTeamHandler().getPlayerTeam(player);
+        player.teleport(TTRCore.getInstance().getConfigManager().getTeamSpawn(playersTeam.getIdentifier()));
+        playersTeam.addPoints(1);
         Bukkit.broadcastMessage(TTRPrefix.TTR_GAME + "" + ChatColor.GRAY + player.getName() + " has scored a point!");
     }
 
