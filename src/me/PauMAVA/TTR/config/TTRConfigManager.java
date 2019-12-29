@@ -129,7 +129,7 @@ public class TTRConfigManager {
         matchSection.addDefault("maxpoints", 10);
         matchSection.addDefault("maxhealth", 20);
         this.mapSection = this.configuration.createSection("map");
-        mapSection.addDefault("lobby", new Location(this.world, 1, 207, 1010));
+        mapSection.addDefault("lobby", new Location(this.world, 0, 207, 1014));
         mapSection.addDefault("ironspawns", new ArrayList<Location>(Arrays.asList(new Location(this.world, -0, 206, 1138))));
         mapSection.addDefault("xpspawns", new ArrayList<Location>(Arrays.asList(new Location(this.world, -0, 206, 1166))));
         this.teamsSection = this.configuration.createSection("teams");

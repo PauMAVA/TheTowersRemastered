@@ -24,11 +24,15 @@ import me.PauMAVA.TTR.ui.TeamSelector;
 import net.minecraft.server.v1_15_R1.PacketPlayInClientCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -50,7 +54,10 @@ public class EventListener implements Listener {
                 Inventory playerInventory = event.getPlayer().getInventory();
                 playerInventory.clear();
                 playerInventory.setItem(0, new ItemStack(Material.BLACK_BANNER));
-                event.getPlayer().teleport(TTRCore.getInstance().getConfigManager().getLobbyLocation());
+                Location location = TTRCore.getInstance().getConfigManager().getLobbyLocation();
+                Location copy = new Location(location.getWorld(), location.getX(), location.getY(), location.getZ());
+                copy.add(location.getX() > 0 ? 0.5 : 0.5, 0.0, location.getZ() > 0 ? 0.5 : -0.5);
+                event.getPlayer().teleport(copy);
             }
         }
     }
@@ -71,7 +78,10 @@ public class EventListener implements Listener {
 
     @EventHandler
     public void playerClickEvent(PlayerInteractEvent event) {
-        if(TTRCore.getInstance().enabled() && !TTRCore.getInstance().getCurrentMatch().isOnCourse()) {
+        if(TTRCore.getInstance().enabled() && !(TTRCore.getInstance().getCurrentMatch().getStatus() == MatchStatus.INGAME)) {
+            if(event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+                return;
+            }
             event.setCancelled(true);
             if(event.getItem() != null && event.getItem().getType() == Material.BLACK_BANNER) {
                 new TeamSelector(event.getPlayer()).openSelector();
@@ -81,8 +91,8 @@ public class EventListener implements Listener {
 
     @EventHandler
     public void placeBlockEvent(BlockPlaceEvent event) {
-        if(TTRCore.getInstance().enabled() && !TTRCore.getInstance().getCurrentMatch().isOnCourse()) {
-            event.getPlayer().sendMessage(TTRPrefix.TTR_GAME + "" + ChatColor.GRAY + "You cannot break that block!");
+        if(TTRCore.getInstance().enabled() && !(TTRCore.getInstance().getCurrentMatch().getStatus() == MatchStatus.INGAME)) {
+            event.getPlayer().sendMessage(TTRPrefix.TTR_GAME + "" + ChatColor.RED + "You cannot place a block there!");
             event.setCancelled(true);
         }
     }
@@ -90,7 +100,7 @@ public class EventListener implements Listener {
     @EventHandler
     public void breakBlockEvent(BlockBreakEvent event) {
         if(TTRCore.getInstance().enabled() && !TTRCore.getInstance().getCurrentMatch().isOnCourse()) {
-            event.getPlayer().sendMessage(TTRPrefix.TTR_GAME + "" + ChatColor.GRAY + "You cannot place a block there!");
+            event.getPlayer().sendMessage(TTRPrefix.TTR_GAME + "" + ChatColor.RED + "You cannot break that block!");
             event.setCancelled(true);
         }
     }
@@ -98,7 +108,14 @@ public class EventListener implements Listener {
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
         if(TTRCore.getInstance().enabled() && TTRCore.getInstance().getCurrentMatch().isOnCourse()) {
-            TTRCore.getInstance().getCurrentMatch().playerDeath(event.getEntity());
+            TTRCore.getInstance().getCurrentMatch().playerDeath(event.getEntity(), event.getEntity().getKiller());
+        }
+    }
+
+    @EventHandler
+    public void onPlayerDamage(EntityDamageEvent event) {
+        if(event.getEntity() instanceof Player && !(TTRCore.getInstance().getCurrentMatch().getStatus() == MatchStatus.INGAME)) {
+            event.setCancelled(true);
         }
     }
 

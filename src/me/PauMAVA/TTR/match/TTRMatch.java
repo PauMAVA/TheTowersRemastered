@@ -33,12 +33,14 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
 
 public class TTRMatch {
 
     private MatchStatus status;
     private LootSpawner lootSpawner;
     private CageChecker checker;
+    private HashMap<Player, Integer> kills = new HashMap<Player, Integer>();
 
     public TTRMatch(MatchStatus initialStatus) {
         status = initialStatus;
@@ -69,6 +71,7 @@ public class TTRMatch {
             player.setFoodLevel(20);
             player.setSaturation(20);
             setPlayerArmor(player);
+            this.kills.put(player, 0);
         }
     }
 
@@ -84,7 +87,7 @@ public class TTRMatch {
         }
     }
 
-    public void playerDeath(Player player) {
+    public void playerDeath(Player player, Player killer) {
         new BukkitRunnable(){
             @Override
             public void run() {
@@ -106,6 +109,7 @@ public class TTRMatch {
                 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 10 ,1);
                 player.playSound(player.getLocation(), Sound.BLOCK_GLASS_BREAK, 10 ,1);
                 this.cancel();
+                kills.put(killer, getKills(killer) + 1);
             }
         }.runTaskLater(TTRCore.getInstance(), 2L);
     }
@@ -135,6 +139,10 @@ public class TTRMatch {
 
     public MatchStatus getStatus() {
         return this.status;
+    }
+
+    public int getKills(Player player) {
+        return this.kills.getOrDefault(player, 0);
     }
 
 }

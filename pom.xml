@@ -6,7 +6,7 @@
 
     <groupId>me.PauMAVA</groupId>
     <artifactId>TheTowersRemastered</artifactId>
-    <version>pre-0.1</version>
+    <version>1.0</version>
     <build>
         <sourceDirectory>src</sourceDirectory>
         <resources>

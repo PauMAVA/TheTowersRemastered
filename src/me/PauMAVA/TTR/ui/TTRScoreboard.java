@@ -20,17 +20,18 @@ public class TTRScoreboard {
 
     public TTRScoreboard() {
         this.ttrScoreboard = this.scoreboardManager.getNewScoreboard();
-        this.kills = this.ttrScoreboard.registerNewObjective("kills", "PLAYER_KILLS", ChatColor.LIGHT_PURPLE + "kills");
+        this.kills = this.ttrScoreboard.registerNewObjective("kills", "dummy", ChatColor.LIGHT_PURPLE + "kills");
         this.kills.setDisplaySlot(DisplaySlot.PLAYER_LIST);
-        this.health = this.ttrScoreboard.registerNewObjective("health", "HEALTH", "Health", RenderType.HEARTS);
+        this.health = this.ttrScoreboard.registerNewObjective("showhealth", "health", ChatColor.RED + "❤");
         this.health.setDisplaySlot(DisplaySlot.BELOW_NAME);
-        this.points = this.ttrScoreboard.registerNewObjective("points", "DUMMY", ChatColor.AQUA + "" + ChatColor.BOLD + "Points");
+        this.points = this.ttrScoreboard.registerNewObjective("points", "dummy", ChatColor.AQUA + "" + ChatColor.BOLD + "Points");
         this.points.setDisplaySlot(DisplaySlot.SIDEBAR);
     }
 
     public void refreshScoreboard() {
         for(Player player: Bukkit.getServer().getOnlinePlayers()) {
             player.setScoreboard(this.ttrScoreboard);
+            this.kills.getScore(player.getName()).setScore(TTRCore.getInstance().getCurrentMatch().getKills(player));
         }
     }
 
@@ -49,13 +50,14 @@ public class TTRScoreboard {
                     ChatColor teamColor = TTRCore.getInstance().getConfigManager().getTeamColor(team.getIdentifier());
                     points.getScore(teamColor + "" + ChatColor.BOLD + team.getIdentifier()).setScore(team.getPoints());
                 }
-                points.getScore(ChatColor.DARK_GRAY + "�m                         ").setScore(-1);
+                points.getScore(ChatColor.DARK_GRAY + "§m                         ").setScore(-1);
                 if(totalTime != null) {
                     ttrScoreboard.resetScores(totalTime.getEntry());
                 }
                 totalTime = points.getScore(ChatColor.GREEN + "" + ChatColor.BOLD + "Total time: " + ChatColor.GRAY + prettyTime(i));
                 totalTime.setScore(-2);
                 i++;
+                refreshScoreboard();
             }
 
             private String prettyTime(int i) {
