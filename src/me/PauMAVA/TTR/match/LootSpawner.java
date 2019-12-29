@@ -57,7 +57,9 @@ public class LootSpawner {
             @Override
             public void run() {
                 for(Location location: ironLocations) {
-                    location.getWorld().dropItem(location, new ItemStack(Material.IRON_INGOT, 1));
+                    Location copy = new Location(location.getWorld(), location.getX(), location.getY(), location.getZ());
+                    copy.add(location.getX() > 0 ? 0.5 : 0.5, 0.0, location.getZ() > 0 ? 0.5 : -0.5);
+                    location.getWorld().dropItem(copy, new ItemStack(Material.IRON_INGOT, 1));
                 }
             }
         }.runTaskTimer(TTRCore.getInstance(), 0L, this.ironFrequency).getTaskId();
@@ -68,7 +70,9 @@ public class LootSpawner {
             @Override
             public void run() {
                 for(Location location: xpLocations) {
-                    location.getWorld().spawnEntity(location, EntityType.THROWN_EXP_BOTTLE);
+                    Location copy = new Location(location.getWorld(), location.getX(), location.getY(), location.getZ());
+                    copy.add(location.getX() > 0 ? 0.5 : 0.5, 0.0, location.getZ() > 0 ? 0.5 : -0.5);
+                    location.getWorld().spawnEntity(copy, EntityType.THROWN_EXP_BOTTLE);
                 }
             }
         }.runTaskTimer(TTRCore.getInstance(), 0L, this.xpFrequency).getTaskId();

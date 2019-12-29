@@ -109,7 +109,7 @@ public class TTRConfigManager {
     public HashMap<Location, TTRTeam> getTeamCages() {
         HashMap<Location, TTRTeam> cages = new HashMap<Location, TTRTeam>();
         for(String teamName: getTeamNames()) {
-            cages.put(getTeamCage(teamName), TTRCore.getInstance().getTeamHandler().getTeam(teamName));
+            cages.put(getTeamCage(teamName), TTRCore.getInstance().getTeamHandler().getTeam(teamName                                                                                                                                                                                                                                            ));
         }
         return cages;
     }
@@ -130,11 +130,11 @@ public class TTRConfigManager {
         matchSection.addDefault("maxhealth", 20);
         this.mapSection = this.configuration.createSection("map");
         mapSection.addDefault("lobby", new Location(this.world, 1, 207, 1010));
-        mapSection.addDefault("ironspawns", new ArrayList<Location>(Arrays.asList(new Location(this.world, 0,203, 1138))));
-        mapSection.addDefault("xpspawns", new ArrayList<Location>(Arrays.asList(new Location(this.world, 0, 203, 1166))));
+        mapSection.addDefault("ironspawns", new ArrayList<Location>(Arrays.asList(new Location(this.world, -0, 206, 1138))));
+        mapSection.addDefault("xpspawns", new ArrayList<Location>(Arrays.asList(new Location(this.world, -0, 206, 1166))));
         this.teamsSection = this.configuration.createSection("teams");
-        ConfigurationSection team1section = teamsSection.createSection("team1");
-        ConfigurationSection team2section = teamsSection.createSection("team2");
+        ConfigurationSection team1section = teamsSection.createSection("Red Team");
+        ConfigurationSection team2section = teamsSection.createSection("Blue Team");
         team1section.addDefault("color", "RED");
         team2section.addDefault("color", "BLUE");
         team1section.addDefault("spawn", new Location(this.world, 84, 192, 1152));

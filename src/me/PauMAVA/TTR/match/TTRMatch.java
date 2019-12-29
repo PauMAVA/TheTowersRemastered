@@ -20,11 +20,19 @@ package me.PauMAVA.TTR.match;
 
 import me.PauMAVA.TTR.TTRCore;
 import me.PauMAVA.TTR.teams.TTRTeam;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.Sound;
+import net.minecraft.server.v1_15_R1.Items;
+import net.minecraft.server.v1_15_R1.PacketPlayInClientCommand;
+import net.minecraft.server.v1_15_R1.PacketPlayInClientCommand.EnumClientCommand;
+import org.bukkit.*;
+import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.scheduler.BukkitRunnable;
+
+import java.lang.reflect.Field;
 
 public class TTRMatch {
 
@@ -54,10 +62,13 @@ public class TTRMatch {
                 continue;
             }
             player.teleport(TTRCore.getInstance().getConfigManager().getTeamSpawn(playerTeam.getIdentifier()));
+            player.getInventory().clear();
+            player.setExp(0);
             player.setGameMode(GameMode.SURVIVAL);
             player.setHealth(TTRCore.getInstance().getConfigManager().getMaxHealth());
             player.setFoodLevel(20);
             player.setSaturation(20);
+            setPlayerArmor(player);
         }
     }
 
@@ -71,6 +82,55 @@ public class TTRMatch {
             player.sendTitle(teamColor + "" + ChatColor.BOLD + team.getIdentifier(), ChatColor.AQUA + "WINS!", 10, 100, 20);
             player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 10, 1);
         }
+    }
+
+    public void playerDeath(Player player) {
+        new BukkitRunnable(){
+            @Override
+            public void run() {
+                PacketPlayInClientCommand packet = new PacketPlayInClientCommand();
+                Field a;
+                try {
+                    a = packet.getClass().getDeclaredField("a");
+                    a.setAccessible(true);
+                    a.set(packet, EnumClientCommand.PERFORM_RESPAWN);
+                    ((CraftPlayer) player).getHandle().playerConnection.a(packet);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                TTRTeam team = TTRCore.getInstance().getTeamHandler().getPlayerTeam(player);
+                if(team != null) {
+                    player.teleport(TTRCore.getInstance().getConfigManager().getTeamSpawn(team.getIdentifier()));
+                }
+                setPlayerArmor(player);
+                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 10 ,1);
+                player.playSound(player.getLocation(), Sound.BLOCK_GLASS_BREAK, 10 ,1);
+                this.cancel();
+            }
+        }.runTaskLater(TTRCore.getInstance(), 2L);
+    }
+
+    private void setPlayerArmor(Player player) {
+        TTRTeam team = TTRCore.getInstance().getTeamHandler().getPlayerTeam(player);
+        ChatColor color;
+        if(team != null) {
+            color = TTRCore.getInstance().getConfigManager().getTeamColor(team.getIdentifier());
+        } else {
+            return;
+        }
+        ItemStack[] armor = new ItemStack[]{new ItemStack(Material.LEATHER_BOOTS, 1), new ItemStack(Material.LEATHER_LEGGINGS, 1), new ItemStack(Material.LEATHER_CHESTPLATE, 1), new ItemStack(Material.LEATHER_HELMET, 1)};
+        for(ItemStack itemStack: armor) {
+            LeatherArmorMeta meta = (LeatherArmorMeta) itemStack.getItemMeta();
+            Color armorColor = Color.fromRGB(0,0,0);
+            try {
+                meta.setColor((Color) armorColor.getClass().getDeclaredField(color.name()).get(armorColor));
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+            meta.addEnchant(Enchantment.VANISHING_CURSE, 1, true);
+            itemStack.setItemMeta(meta);
+        }
+        player.getInventory().setArmorContents(armor);
     }
 
     public MatchStatus getStatus() {

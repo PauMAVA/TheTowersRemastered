@@ -22,10 +22,7 @@ import me.PauMAVA.TTR.TTRCore;
 import me.PauMAVA.TTR.teams.TTRTeam;
 import me.PauMAVA.TTR.ui.TTRScoreboard;
 import me.PauMAVA.TTR.util.TTRPrefix;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Particle;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -50,6 +47,7 @@ public class CageChecker {
                         cage.getLocation().getWorld().spawnParticle(Particle.SPELL, particleLocation, 100);
                         if(cage.isInCage(p) && TTRCore.getInstance().getTeamHandler().getPlayerTeam(p) != null) {
                             if(cage.getOwner().equals(TTRCore.getInstance().getTeamHandler().getPlayerTeam(p))) {
+                                p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 10, 1);
                                 p.sendMessage(TTRPrefix.TTR_GAME + "" + ChatColor.RED + "You can't do that!");
                                 p.teleport(TTRCore.getInstance().getConfigManager().getTeamSpawn(TTRCore.getInstance().getTeamHandler().getPlayerTeam(p).getIdentifier()));
                             } else {
@@ -73,6 +71,9 @@ public class CageChecker {
         playersTeam.addPoints(1);
         TTRCore.getInstance().getScoreboard().refreshScoreboard();
         Bukkit.broadcastMessage(TTRPrefix.TTR_GAME + "" + ChatColor.GRAY + player.getName() + " has scored a point!");
+        for(Player p: Bukkit.getServer().getOnlinePlayers()) {
+            p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 10, 1);
+        }
         if(playersTeam.getPoints() >= TTRCore.getInstance().getConfigManager().getMaxPoints()) {
             TTRCore.getInstance().getCurrentMatch().endMatch(playersTeam);
         }
