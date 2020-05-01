@@ -29,6 +29,7 @@ public class TTRScoreboard {
     }
 
     public void refreshScoreboard() {
+        updatePoints();
         for(Player player: Bukkit.getServer().getOnlinePlayers()) {
             player.setScoreboard(this.ttrScoreboard);
             this.kills.getScore(player.getName()).setScore(TTRCore.getInstance().getCurrentMatch().getKills(player));
@@ -46,10 +47,7 @@ public class TTRScoreboard {
             private int i = 0;
             @Override
             public void run() {
-                for(TTRTeam team: TTRCore.getInstance().getTeamHandler().getTeams()) {
-                    ChatColor teamColor = TTRCore.getInstance().getConfigManager().getTeamColor(team.getIdentifier());
-                    points.getScore(teamColor + "" + ChatColor.BOLD + team.getIdentifier()).setScore(team.getPoints());
-                }
+                updatePoints();
                 points.getScore(ChatColor.DARK_GRAY + "§m                         ").setScore(-1);
                 if(totalTime != null) {
                     ttrScoreboard.resetScores(totalTime.getEntry());
@@ -76,6 +74,13 @@ public class TTRScoreboard {
             }
         }.runTaskTimer(TTRCore.getInstance(), 0L, 20L).getTaskId();
         refreshScoreboard();
+    }
+
+    private void updatePoints() {
+        for(TTRTeam team: TTRCore.getInstance().getTeamHandler().getTeams()) {
+            ChatColor teamColor = TTRCore.getInstance().getConfigManager().getTeamColor(team.getIdentifier());
+            points.getScore(teamColor + "" + ChatColor.BOLD + team.getIdentifier()).setScore(team.getPoints());
+        }
     }
 
     public void stopScoreboardTask() {

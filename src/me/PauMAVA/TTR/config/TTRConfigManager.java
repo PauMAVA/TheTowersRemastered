@@ -35,6 +35,7 @@ public class TTRConfigManager {
     private ConfigurationSection teamsSection;
     private ConfigurationSection matchSection;
     private ConfigurationSection mapSection;
+    private ConfigurationSection autoStartSection;
 
     public TTRConfigManager(FileConfiguration configuration) {
         this.configuration = configuration;
@@ -46,6 +47,7 @@ public class TTRConfigManager {
             this.teamsSection = this.configuration.getConfigurationSection("teams");
             this.mapSection = this.configuration.getConfigurationSection("map");
             this.matchSection = this.configuration.getConfigurationSection("match");
+            this.autoStartSection = this.configuration.getConfigurationSection("autostart");
         }
     }
 
@@ -61,8 +63,8 @@ public class TTRConfigManager {
         return this.matchSection.getInt("time");
     }
 
-    public WeatherType getWeather() {
-        return WeatherType.valueOf(this.matchSection.getString("weather"));
+    public String getWeather() {
+        return this.matchSection.getString("weather");
     }
 
     public Location getLobbyLocation() {
@@ -114,6 +116,15 @@ public class TTRConfigManager {
         return cages;
     }
 
+    public boolean isEnabled() {
+        return this.configuration.getBoolean("enable_on_start");
+    }
+
+    public void setEnableOnStart(boolean value) {
+        this.configuration.set("enable_on_start", value);
+        saveConfig();
+    }
+
     private void saveConfig() {
         TTRCore.getInstance().saveConfig();
     }
@@ -123,6 +134,10 @@ public class TTRConfigManager {
     }
 
     private void setUpFile() {
+        this.configuration.addDefault("enable_on_start", false);
+        this.autoStartSection = this.configuration.createSection("autostart");
+        autoStartSection.addDefault("enabled", true);
+        autoStartSection.addDefault("count", 4);
         this.matchSection = this.configuration.createSection("match");
         matchSection.addDefault("time", 10000);
         matchSection.addDefault("weather", "CLEAR");

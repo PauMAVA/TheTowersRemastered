@@ -58,6 +58,7 @@ public class EventListener implements Listener {
                 Location copy = new Location(location.getWorld(), location.getX(), location.getY(), location.getZ());
                 copy.add(location.getX() > 0 ? 0.5 : 0.5, 0.0, location.getZ() > 0 ? 0.5 : -0.5);
                 event.getPlayer().teleport(copy);
+                TTRCore.getInstance().getAutoStarter().addPlayerToQueue(event.getPlayer());
             }
         }
     }
@@ -66,6 +67,7 @@ public class EventListener implements Listener {
     public void onPlayerLeave(PlayerQuitEvent event) {
         if(TTRCore.getInstance().enabled()) {
             event.setQuitMessage(TTRPrefix.TTR_GAME + "" + ChatColor.RED + "- " + ChatColor.GRAY + event.getPlayer().getName() + " has left the game");
+            TTRCore.getInstance().getAutoStarter().removePlayerFromQueue(event.getPlayer());
         }
     }
 

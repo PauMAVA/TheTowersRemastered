@@ -24,6 +24,8 @@ import net.minecraft.server.v1_15_R1.Items;
 import net.minecraft.server.v1_15_R1.PacketPlayInClientCommand;
 import net.minecraft.server.v1_15_R1.PacketPlayInClientCommand.EnumClientCommand;
 import org.bukkit.*;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -57,6 +59,9 @@ public class TTRMatch {
         this.checker.setCages(TTRCore.getInstance().getConfigManager().getTeamCages(), 2);
         this.checker.startChecking();
         this.lootSpawner.startSpawning();
+        TTRCore.getInstance().getWorldHandler().configureTime();
+        TTRCore.getInstance().getWorldHandler().configureWeather();
+        TTRCore.getInstance().getWorldHandler().setWorldDifficulty(Difficulty.PEACEFUL);
         TTRCore.getInstance().getScoreboard().startScoreboardTask();
         for(Player player: Bukkit.getServer().getOnlinePlayers()) {
             TTRTeam playerTeam = TTRCore.getInstance().getTeamHandler().getPlayerTeam(player);
@@ -67,7 +72,11 @@ public class TTRMatch {
             player.getInventory().clear();
             player.setExp(0);
             player.setGameMode(GameMode.SURVIVAL);
-            player.setHealth(TTRCore.getInstance().getConfigManager().getMaxHealth());
+            double health = TTRCore.getInstance().getConfigManager().getMaxHealth();
+            AttributeInstance maxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+            maxHealth.setBaseValue(health);
+            player.setHealthScale(health);
+            player.setHealth(health);
             player.setFoodLevel(20);
             player.setSaturation(20);
             setPlayerArmor(player);
@@ -85,6 +94,9 @@ public class TTRMatch {
             player.sendTitle(teamColor + "" + ChatColor.BOLD + team.getIdentifier(), ChatColor.AQUA + "WINS!", 10, 100, 20);
             player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 10, 1);
         }
+        TTRCore.getInstance().getWorldHandler().enableDayLightCycle();
+        TTRCore.getInstance().getWorldHandler().enableWeatherCycle();
+        TTRCore.getInstance().getWorldHandler().restoreDifficulty();
     }
 
     public void playerDeath(Player player, Player killer) {
