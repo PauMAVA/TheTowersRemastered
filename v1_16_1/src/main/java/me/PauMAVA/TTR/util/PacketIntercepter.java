@@ -24,8 +24,8 @@ import io.netty.channel.ChannelPipeline;
 import io.netty.channel.ChannelPromise;
 import me.PauMAVA.TTR.TTRCore;
 import me.PauMAVA.TTR.chat.TTRChatManager;
-import net.minecraft.server.v1_15_R1.PacketPlayInChat;
-import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
+import net.minecraft.server.v1_16_R1.PacketPlayInChat;
+import org.bukkit.craftbukkit.v1_16_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 public class PacketIntercepter {

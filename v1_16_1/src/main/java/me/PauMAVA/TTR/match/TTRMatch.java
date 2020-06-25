@@ -20,17 +20,21 @@ package me.PauMAVA.TTR.match;
 
 import me.PauMAVA.TTR.TTRCore;
 import me.PauMAVA.TTR.teams.TTRTeam;
-import net.minecraft.server.v1_15_R1.Items;
-import net.minecraft.server.v1_15_R1.PacketPlayInClientCommand;
-import net.minecraft.server.v1_15_R1.PacketPlayInClientCommand.EnumClientCommand;
-import org.bukkit.*;
+import net.minecraft.server.v1_16_R1.PacketPlayInClientCommand;
+import net.minecraft.server.v1_16_R1.PacketPlayInClientCommand.EnumClientCommand;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Difficulty;
+import org.bukkit.GameMode;
+import org.bukkit.Material;
+import org.bukkit.Color;
+import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
-import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_16_R1.entity.CraftPlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 

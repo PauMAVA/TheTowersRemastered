@@ -21,8 +21,6 @@ package me.PauMAVA.TTR.util;
 import me.PauMAVA.TTR.TTRCore;
 import me.PauMAVA.TTR.match.MatchStatus;
 import me.PauMAVA.TTR.ui.TeamSelector;
-import net.minecraft.server.v1_15_R1.PacketPlayInClientCommand;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -34,15 +32,12 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-
-import java.lang.reflect.Field;
 
 public class EventListener implements Listener {
 
