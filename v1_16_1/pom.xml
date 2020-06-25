@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>me.PauMAVA</groupId>
+    <artifactId>TheTowersRemastered</artifactId>
+    <version>1.1</version>
+    <build>
+        <sourceDirectory>src</sourceDirectory>
+        <resources>
+            <resource>
+                <directory>src</directory>
+                <includes>
+                    <include>**/*.yml</include>
+                </includes>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.0</version>
+                <configuration>
+                    <source>11</source>
+                    <target>11</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib</classpathPrefix>
+                            <mainClass>me.PauMAVA.TTR.TTRCore</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <id>copy</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <inherited>false</inherited>
+                        <configuration>
+                            <target>
+                                <echo>Copying .jar to Development Server....</echo>
+                                <copy todir="C:\Users\Pau\Desktop\Servers\1.15.2\TestServer\plugins" overwrite="true">
+                                    <fileset dir="target" includes="*.jar">
+                                        <include name="TheTowersRemastered.jar"/>
+                                    </fileset>
+                                </copy>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    <repositories>
+        <repository>
+            <id>PauMAVen</id>
+            <url>https://raw.githubusercontent.com/PauMAVA/PauMAVen/master</url>
+        </repository>
+    </repositories>
+    <dependencies>
+        <dependency>
+            <groupId>me.PauMAVA</groupId>
+            <artifactId>craftbukkit</artifactId>
+            <version>1.16.1</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+</project>

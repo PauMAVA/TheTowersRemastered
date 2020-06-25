@@ -20,32 +20,27 @@ package me.PauMAVA.TTR.commands;
 
 import me.PauMAVA.TTR.TTRCore;
 import me.PauMAVA.TTR.util.TTRPrefix;
-import me.PauMAVA.TTR.util.XPBarTimer;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-public class StartMatchCommand implements CommandExecutor {
+public class EnableDisableCommand implements CommandExecutor {
+
+    private TTRCore plugin;
+
+    public EnableDisableCommand(TTRCore plugin) {
+        this.plugin = plugin;
+    }
+
     @Override
-    public boolean onCommand(CommandSender theSender, Command command, String label, String[] args) {
-        if(TTRCore.getInstance().enabled() && !TTRCore.getInstance().getCurrentMatch().isOnCourse()) {
-            int timer;
-            if (args == null || args.length == 0) {
-               timer = 10;
-            } else {
-                try {
-                    timer = Integer.parseInt(args[0]);
-                } catch (NumberFormatException e) {
-                    theSender.sendMessage(TTRPrefix.TTR_GAME + "" + ChatColor.GRAY + "You must input an integer!");
-                    return false;
-                }
-            }
-            try {
-                new XPBarTimer(timer, TTRCore.getInstance().getCurrentMatch().getClass().getMethod("startMatch")).runTaskTimer(TTRCore.getInstance(), 0L, 20L);
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-            }
+    public boolean onCommand(CommandSender theSender, Command cmd, String label, String[] args) {
+        if (label.equalsIgnoreCase("ttrenable")) {
+            plugin.getConfigManager().setEnableOnStart(true);
+            theSender.sendMessage(TTRPrefix.TTR_GAME + "" + ChatColor.GREEN + "Plugin enabled on server start. /reload or restart server to apply changes! Players should rejoin...");
+        } else if (label.equalsIgnoreCase("ttrdisable")) {
+            plugin.getConfigManager().setEnableOnStart(false);
+            theSender.sendMessage(TTRPrefix.TTR_GAME + "" + ChatColor.RED + "Plugin disabled on server start. /reload or restart server to apply changes!");
         }
         return false;
     }
