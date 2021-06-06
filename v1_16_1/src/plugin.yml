@@ -1,6 +1,6 @@
 name: TheTowersRemastered
-version: 1.1
-api-version: 1.15
+version: 1.2.1
+api-version: 1.16
 main: me.PauMAVA.TTR.TTRCore
 
 commands:

@@ -1,6 +1,6 @@
 /*
  * TheTowersRemastered (TTR)
- * Copyright (c) 2019-2020  Pau Machetti Vallverdu
+ * Copyright (c) 2019-2021  Pau Machetti Vallverdú
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,6 @@ package me.PauMAVA.TTR.ui;
 
 import me.PauMAVA.TTR.TTRCore;
 import me.PauMAVA.TTR.teams.TTRTeam;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -44,12 +43,12 @@ public class TeamSelector extends CustomUI implements Listener {
         setUp();
         TTRCore.getInstance().getServer().getPluginManager().registerEvents(this, TTRCore.getInstance());
         TTRTeam possibleTeam = TTRCore.getInstance().getTeamHandler().getPlayerTeam(this.owner);
-        if(possibleTeam != null) {
-            for(int i = 0; i < super.getInventory().getSize(); i++) {
+        if (possibleTeam != null) {
+            for (int i = 0; i < super.getInventory().getSize(); i++) {
                 ItemStack stack = super.getInventory().getItem(i);
-                if(stack != null) {
+                if (stack != null) {
                     String cleanName = ChatColor.stripColor(stack.getItemMeta().getDisplayName());
-                    if(possibleTeam.getIdentifier().equalsIgnoreCase(cleanName)) {
+                    if (possibleTeam.getIdentifier().equalsIgnoreCase(cleanName)) {
                         this.selected = i;
                         addEnchantment(i);
                         break;
@@ -69,7 +68,7 @@ public class TeamSelector extends CustomUI implements Listener {
 
     public void setUp() {
         int i = 0;
-        for(String teamName: TTRCore.getInstance().getConfigManager().getTeamNames()) {
+        for (String teamName : TTRCore.getInstance().getConfigManager().getTeamNames()) {
             setSlot(i, new ItemStack(Material.valueOf(TTRCore.getInstance().getConfigManager().getTeamColor(teamName).name() + "_WOOL"), 1), TTRCore.getInstance().getConfigManager().getTeamColor(teamName) + teamName, null);
             i++;
         }
@@ -77,18 +76,18 @@ public class TeamSelector extends CustomUI implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        if(event.getClickedInventory() == super.getInventory() && event.getClickedInventory().getItem(event.getSlot()) != null) {
+        if (event.getClickedInventory() == super.getInventory() && event.getClickedInventory().getItem(event.getSlot()) != null) {
             this.selected = event.getSlot();
             setUp();
             addEnchantment(this.selected);
             String teamName = super.getInventory().getItem(this.selected).getItemMeta().getDisplayName();
             TTRCore.getInstance().getTeamHandler().addPlayer(teamName, this.owner);
-            if(lastTeam != null) {
+            if (lastTeam != null) {
                 TTRCore.getInstance().getTeamHandler().removePlayer(teamName, this.owner);
             }
             this.lastTeam = teamName;
         }
-        if(TTRCore.getInstance().enabled() && !TTRCore.getInstance().getCurrentMatch().isOnCourse()) {
+        if (TTRCore.getInstance().enabled() && !TTRCore.getInstance().getCurrentMatch().isOnCourse()) {
             event.setCancelled(true);
         }
     }

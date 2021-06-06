@@ -1,12 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ TheTowersRemastered (TTR)
+  ~ Copyright (c) 2019-2021  Pau Machetti Vallverdú
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>me.PauMAVA</groupId>
-    <artifactId>TheTowersRemastered</artifactId>
-    <version>1.2</version>
+    <artifactId>TheTowersRemastered.16</artifactId>
+
+    <parent>
+        <groupId>me.PauMAVA</groupId>
+        <artifactId>TheTowersRemastered</artifactId>
+        <version>1.2.1</version>
+    </parent>
+
+    <name>TheTowersRemastered [1.16.1]</name>
+
     <build>
         <sourceDirectory>src</sourceDirectory>
         <resources>
@@ -53,7 +78,7 @@
                         <configuration>
                             <target>
                                 <echo>Copying .jar to Development Server....</echo>
-                                <copy todir="C:\Users\Pau\Desktop\Servers\1.15.2\TestServer\plugins" overwrite="true">
+                                <copy todir="${bukkit.server.plugins.1.16}" overwrite="true">
                                     <fileset dir="target" includes="*.jar">
                                         <include name="TheTowersRemastered.jar"/>
                                     </fileset>
@@ -65,12 +90,7 @@
             </plugin>
         </plugins>
     </build>
-    <repositories>
-        <repository>
-            <id>PauMAVen</id>
-            <url>https://raw.githubusercontent.com/PauMAVA/PauMAVen/master</url>
-        </repository>
-    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>me.PauMAVA</groupId>

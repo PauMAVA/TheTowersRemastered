@@ -1,6 +1,6 @@
 /*
  * TheTowersRemastered (TTR)
- * Copyright (c) 2019-2020  Pau Machetti Vallverdu
+ * Copyright (c) 2019-2021  Pau Machetti Vallverdú
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,6 @@ package me.PauMAVA.TTR.match;
 
 import me.PauMAVA.TTR.TTRCore;
 import me.PauMAVA.TTR.teams.TTRTeam;
-import me.PauMAVA.TTR.ui.TTRScoreboard;
 import me.PauMAVA.TTR.util.TTRPrefix;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -37,16 +36,16 @@ public class CageChecker {
 
 
     public void startChecking() {
-        this.checkerTaskPID = new BukkitRunnable(){
+        this.checkerTaskPID = new BukkitRunnable() {
             @Override
             public void run() {
-                for(Player p: Bukkit.getServer().getOnlinePlayers()) {
-                    for(Cage cage: cages) {
+                for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+                    for (Cage cage : cages) {
                         Location particleLocation = new Location(cage.getLocation().getWorld(), cage.getLocation().getBlockX(), cage.getLocation().getBlockY() + 1, cage.getLocation().getBlockZ());
                         particleLocation.add(particleLocation.getX() > 0 ? 0.5 : -0.5, 0.0, particleLocation.getZ() > 0 ? 0.5 : -0.5);
                         cage.getLocation().getWorld().spawnParticle(Particle.SPELL, particleLocation, 100);
-                        if(cage.isInCage(p) && TTRCore.getInstance().getTeamHandler().getPlayerTeam(p) != null) {
-                            if(cage.getOwner().equals(TTRCore.getInstance().getTeamHandler().getPlayerTeam(p))) {
+                        if (cage.isInCage(p) && TTRCore.getInstance().getTeamHandler().getPlayerTeam(p) != null) {
+                            if (cage.getOwner().equals(TTRCore.getInstance().getTeamHandler().getPlayerTeam(p))) {
                                 p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 10, 1);
                                 p.sendMessage(TTRPrefix.TTR_GAME + "" + ChatColor.RED + "You can't do that!");
                                 p.teleport(TTRCore.getInstance().getConfigManager().getTeamSpawn(TTRCore.getInstance().getTeamHandler().getPlayerTeam(p).getIdentifier()));
@@ -71,16 +70,16 @@ public class CageChecker {
         playersTeam.addPoints(1);
         TTRCore.getInstance().getScoreboard().refreshScoreboard();
         Bukkit.broadcastMessage(TTRPrefix.TTR_GAME + "" + ChatColor.GRAY + player.getName() + " has scored a point!");
-        for(Player p: Bukkit.getServer().getOnlinePlayers()) {
+        for (Player p : Bukkit.getServer().getOnlinePlayers()) {
             p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 10, 1);
         }
-        if(playersTeam.getPoints() >= TTRCore.getInstance().getConfigManager().getMaxPoints()) {
+        if (playersTeam.getPoints() >= TTRCore.getInstance().getConfigManager().getMaxPoints()) {
             TTRCore.getInstance().getCurrentMatch().endMatch(playersTeam);
         }
     }
 
     public void setCages(HashMap<Location, TTRTeam> cages, int effectiveRadius) {
-        for(Location cage: cages.keySet()) {
+        for (Location cage : cages.keySet()) {
             this.cages.add(new Cage(cage, effectiveRadius, cages.get(cage)));
         }
     }

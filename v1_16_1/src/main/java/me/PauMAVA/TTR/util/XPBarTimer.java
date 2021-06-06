@@ -1,6 +1,6 @@
 /*
  * TheTowersRemastered (TTR)
- * Copyright (c) 2019-2020  Pau Machetti Vallverdu
+ * Copyright (c) 2019-2021  Pau Machetti Vallverdú
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,16 +43,16 @@ public class XPBarTimer extends BukkitRunnable {
 
     @Override
     public void run() {
-        for(Player player: Bukkit.getServer().getOnlinePlayers()) {
+        for (Player player : Bukkit.getServer().getOnlinePlayers()) {
             player.setLevel(i);
         }
-        if(i <= 5) {
-            for(Player player: Bukkit.getServer().getOnlinePlayers()) {
+        if (i <= 5) {
+            for (Player player : Bukkit.getServer().getOnlinePlayers()) {
                 player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 10, 1);
             }
         }
-        if(i <= 0) {
-            if(this.execute != null) {
+        if (i <= 0) {
+            if (this.execute != null) {
                 try {
                     this.execute.invoke(TTRCore.getInstance().getCurrentMatch());
                 } catch (IllegalAccessException | InvocationTargetException e) {

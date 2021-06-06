@@ -30,26 +30,27 @@ public class TTRScoreboard {
 
     public void refreshScoreboard() {
         updatePoints();
-        for(Player player: Bukkit.getServer().getOnlinePlayers()) {
+        for (Player player : Bukkit.getServer().getOnlinePlayers()) {
             player.setScoreboard(this.ttrScoreboard);
             this.kills.getScore(player.getName()).setScore(TTRCore.getInstance().getCurrentMatch().getKills(player));
         }
     }
 
     public void removeScoreboard() {
-        for(Player player: Bukkit.getServer().getOnlinePlayers()) {
+        for (Player player : Bukkit.getServer().getOnlinePlayers()) {
             player.setScoreboard(this.scoreboardManager.getMainScoreboard());
         }
     }
 
     public void startScoreboardTask() {
-        this.taskPID = new BukkitRunnable(){
+        this.taskPID = new BukkitRunnable() {
             private int i = 0;
+
             @Override
             public void run() {
                 updatePoints();
                 points.getScore(ChatColor.DARK_GRAY + "§m                         ").setScore(-1);
-                if(totalTime != null) {
+                if (totalTime != null) {
                     ttrScoreboard.resetScores(totalTime.getEntry());
                 }
                 totalTime = points.getScore(ChatColor.GREEN + "" + ChatColor.BOLD + "Total time: " + ChatColor.GRAY + prettyTime(i));
@@ -60,12 +61,12 @@ public class TTRScoreboard {
 
             private String prettyTime(int i) {
                 String elapsedMinutes, elapsedSeconds;
-                if((((i % 86400) % 3600) / 60) < 10) {
+                if ((((i % 86400) % 3600) / 60) < 10) {
                     elapsedMinutes = "0" + ((i % 86400) % 3600) / 60;
                 } else {
                     elapsedMinutes = "" + ((i % 86400) % 3600) / 60;
                 }
-                if((((i % 86400) % 3600) % 60) < 10) {
+                if ((((i % 86400) % 3600) % 60) < 10) {
                     elapsedSeconds = "0" + ((i % 86400) % 3600) % 60;
                 } else {
                     elapsedSeconds = "" + ((i % 86400) % 3600) % 60;
@@ -77,7 +78,7 @@ public class TTRScoreboard {
     }
 
     private void updatePoints() {
-        for(TTRTeam team: TTRCore.getInstance().getTeamHandler().getTeams()) {
+        for (TTRTeam team : TTRCore.getInstance().getTeamHandler().getTeams()) {
             ChatColor teamColor = TTRCore.getInstance().getConfigManager().getTeamColor(team.getIdentifier());
             points.getScore(teamColor + "" + ChatColor.BOLD + team.getIdentifier()).setScore(team.getPoints());
         }

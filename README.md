@@ -1,10 +1,10 @@
 # TheTowersRemastered
-A remsatered version of The Towers for 1.15.X
+A remastered version of The Towers for 1.15.X - 1.16.X
 
 ## License (GNU v3)
 ````
  TheTowersRemastered (TTR)
- Copyright (c) 2019-2020  Pau Machetti Vallverdú
+ Copyright (c) 2019-2021  Pau Machetti VallverdÃº
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or

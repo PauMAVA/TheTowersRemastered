@@ -1,6 +1,6 @@
 /*
  * TheTowersRemastered (TTR)
- * Copyright (c) 2019-2020  Pau Machetti Vallverdu
+ * Copyright (c) 2019-2021  Pau Machetti Vallverdú
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,6 @@ package me.PauMAVA.TTR.teams;
 
 import me.PauMAVA.TTR.TTRCore;
 import me.PauMAVA.TTR.match.TTRMatch;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -33,14 +32,14 @@ public class TTRTeamHandler {
     private List<TTRTeam> teams = new ArrayList<TTRTeam>();
 
     public void setUpDefaultTeams() {
-        for(String team: TTRCore.getInstance().getConfigManager().getTeamNames()) {
+        for (String team : TTRCore.getInstance().getConfigManager().getTeamNames()) {
             this.teams.add(new TTRTeam(team));
         }
     }
 
     public boolean addPlayerToTeam(Player player, String teamIdentifier) {
         TTRTeam team = getTeam(teamIdentifier);
-        if(team == null) {
+        if (team == null) {
             return false;
         }
         team.addPlayer(player);
@@ -49,7 +48,7 @@ public class TTRTeamHandler {
 
     public boolean removePlayerFromTeam(Player player, String teamIdentifier) {
         TTRTeam team = getTeam(teamIdentifier);
-        if(team == null) {
+        if (team == null) {
             return false;
         }
         team.removePlayer(player);
@@ -57,8 +56,8 @@ public class TTRTeamHandler {
     }
 
     public TTRTeam getPlayerTeam(Player player) {
-        for(TTRTeam team: this.teams) {
-            if(team.getPlayers().contains(player)) {
+        for (TTRTeam team : this.teams) {
+            if (team.getPlayers().contains(player)) {
                 return team;
             }
         }
@@ -66,9 +65,9 @@ public class TTRTeamHandler {
     }
 
     public TTRTeam getTeam(String teamIdentifier) {
-        for(TTRTeam team: this.teams) {
+        for (TTRTeam team : this.teams) {
             teamIdentifier = ChatColor.stripColor(teamIdentifier);
-            if(teamIdentifier.contentEquals(team.getIdentifier())) {
+            if (teamIdentifier.contentEquals(team.getIdentifier())) {
                 return team;
             }
         }

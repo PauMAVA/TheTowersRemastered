@@ -1,6 +1,6 @@
 /*
  * TheTowersRemastered (TTR)
- * Copyright (c) 2019-2020  Pau Machetti Vallverdu
+ * Copyright (c) 2019-2021  Pau Machetti Vallverdú
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,17 +26,13 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-
 public class StartMatchCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender theSender, Command command, String label, String[] args) {
-        if(TTRCore.getInstance().enabled() && !TTRCore.getInstance().getCurrentMatch().isOnCourse()) {
+        if (TTRCore.getInstance().enabled() && !TTRCore.getInstance().getCurrentMatch().isOnCourse()) {
             int timer;
             if (args == null || args.length == 0) {
-               timer = 10;
+                timer = 10;
             } else {
                 try {
                     timer = Integer.parseInt(args[0]);

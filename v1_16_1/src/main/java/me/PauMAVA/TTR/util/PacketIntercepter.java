@@ -1,6 +1,6 @@
 /*
  * TheTowersRemastered (TTR)
- * Copyright (c) 2019-2020  Pau Machetti Vallverdu
+ * Copyright (c) 2019-2021  Pau Machetti Vallverdú
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,13 +31,13 @@ import org.bukkit.entity.Player;
 public class PacketIntercepter {
 
     public void addPlayer(Player player) {
-        ChannelDuplexHandler channelDuplexHandler = new ChannelDuplexHandler(){
+        ChannelDuplexHandler channelDuplexHandler = new ChannelDuplexHandler() {
             @Override
             public void channelRead(ChannelHandlerContext context, Object packet) {
-                if(TTRCore.getInstance().enabled() && TTRCore.getInstance().getCurrentMatch().isOnCourse() && packet instanceof PacketPlayInChat && !((PacketPlayInChat) packet).b().startsWith("/")) {
+                if (TTRCore.getInstance().enabled() && TTRCore.getInstance().getCurrentMatch().isOnCourse() && packet instanceof PacketPlayInChat && !((PacketPlayInChat) packet).b().startsWith("/")) {
                     TTRChatManager.sendMessage(player, ((PacketPlayInChat) packet).b());
                 }
-                try{
+                try {
                     super.channelRead(context, packet);
                 } catch (Exception e) {
                     TTRCore.getInstance().getLogger().warning("An error occurred on packet reading process!");
@@ -53,7 +53,8 @@ public class PacketIntercepter {
         ChannelPipeline pipeline = ((CraftPlayer) player).getHandle().playerConnection.networkManager.channel.pipeline();
         try {
             pipeline.addBefore("packet_handler", player.getName(), channelDuplexHandler);
-        } catch (IllegalArgumentException ignored) {}
+        } catch (IllegalArgumentException ignored) {
+        }
     }
 
 

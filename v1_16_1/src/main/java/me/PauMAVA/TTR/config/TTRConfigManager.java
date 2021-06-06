@@ -1,6 +1,6 @@
 /*
  *  TheTowersRemastered (TTR)
- *  Copyright (c) 2019-2020  Pau Machetti Vallverdu
+ *  Copyright (c) 2019-2021  Pau Machetti Vallverdú
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,10 +20,11 @@ package me.PauMAVA.TTR.config;
 
 import me.PauMAVA.TTR.TTRCore;
 import me.PauMAVA.TTR.teams.TTRTeam;
-import org.bukkit.*;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.Hash;
 
 import java.io.File;
 import java.util.*;
@@ -40,7 +41,7 @@ public class TTRConfigManager {
     public TTRConfigManager(FileConfiguration configuration) {
         this.configuration = configuration;
         this.world = TTRCore.getInstance().getServer().getWorlds().get(0);
-        if(!new File(TTRCore.getInstance().getDataFolder() + "/config.yml").exists()) {
+        if (!new File(TTRCore.getInstance().getDataFolder() + "/config.yml").exists()) {
             setUpFile();
             saveConfig();
         } else {
@@ -88,8 +89,8 @@ public class TTRConfigManager {
     }
 
     private ConfigurationSection getTeam(String teamName) {
-        for(String key: this.teamsSection.getKeys(false)) {
-            if(key.equalsIgnoreCase(teamName)) {
+        for (String key : this.teamsSection.getKeys(false)) {
+            if (key.equalsIgnoreCase(teamName)) {
                 return this.teamsSection.getConfigurationSection(key);
             }
         }
@@ -110,8 +111,8 @@ public class TTRConfigManager {
 
     public HashMap<Location, TTRTeam> getTeamCages() {
         HashMap<Location, TTRTeam> cages = new HashMap<Location, TTRTeam>();
-        for(String teamName: getTeamNames()) {
-            cages.put(getTeamCage(teamName), TTRCore.getInstance().getTeamHandler().getTeam(teamName                                                                                                                                                                                                                                            ));
+        for (String teamName : getTeamNames()) {
+            cages.put(getTeamCage(teamName), TTRCore.getInstance().getTeamHandler().getTeam(teamName));
         }
         return cages;
     }

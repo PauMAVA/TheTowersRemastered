@@ -1,6 +1,6 @@
 /*
  * TheTowersRemastered (TTR)
- * Copyright (c) 2019-2020  Pau Machetti Vallverdu
+ * Copyright (c) 2019-2021  Pau Machetti Vallverdú
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,8 +21,6 @@ package me.PauMAVA.TTR.util;
 import me.PauMAVA.TTR.TTRCore;
 import me.PauMAVA.TTR.match.MatchStatus;
 import me.PauMAVA.TTR.ui.TeamSelector;
-import net.minecraft.server.v1_15_R1.PacketPlayInClientCommand;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -34,7 +32,6 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -42,15 +39,13 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.lang.reflect.Field;
-
 public class EventListener implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        if(TTRCore.getInstance().enabled()) {
+        if (TTRCore.getInstance().enabled()) {
             event.setJoinMessage(TTRPrefix.TTR_GAME + "" + ChatColor.GREEN + "+ " + ChatColor.GRAY + event.getPlayer().getName() + " has joined the game");
-            if(TTRCore.getInstance().getCurrentMatch().getStatus() == MatchStatus.PREGAME) {
+            if (TTRCore.getInstance().getCurrentMatch().getStatus() == MatchStatus.PREGAME) {
                 Inventory playerInventory = event.getPlayer().getInventory();
                 playerInventory.clear();
                 playerInventory.setItem(0, new ItemStack(Material.BLACK_BANNER));
@@ -65,7 +60,7 @@ public class EventListener implements Listener {
 
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event) {
-        if(TTRCore.getInstance().enabled()) {
+        if (TTRCore.getInstance().enabled()) {
             event.setQuitMessage(TTRPrefix.TTR_GAME + "" + ChatColor.RED + "- " + ChatColor.GRAY + event.getPlayer().getName() + " has left the game");
             TTRCore.getInstance().getAutoStarter().removePlayerFromQueue(event.getPlayer());
         }
@@ -73,19 +68,19 @@ public class EventListener implements Listener {
 
     @EventHandler
     public void onPlayerDropEvent(PlayerDropItemEvent event) {
-        if(TTRCore.getInstance().enabled() && !TTRCore.getInstance().getCurrentMatch().isOnCourse()) {
+        if (TTRCore.getInstance().enabled() && !TTRCore.getInstance().getCurrentMatch().isOnCourse()) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void playerClickEvent(PlayerInteractEvent event) {
-        if(TTRCore.getInstance().enabled() && !(TTRCore.getInstance().getCurrentMatch().getStatus() == MatchStatus.INGAME)) {
-            if(event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+        if (TTRCore.getInstance().enabled() && !(TTRCore.getInstance().getCurrentMatch().getStatus() == MatchStatus.INGAME)) {
+            if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                 return;
             }
             event.setCancelled(true);
-            if(event.getItem() != null && event.getItem().getType() == Material.BLACK_BANNER) {
+            if (event.getItem() != null && event.getItem().getType() == Material.BLACK_BANNER) {
                 new TeamSelector(event.getPlayer()).openSelector();
             }
         }
@@ -93,7 +88,7 @@ public class EventListener implements Listener {
 
     @EventHandler
     public void placeBlockEvent(BlockPlaceEvent event) {
-        if(TTRCore.getInstance().enabled() && !(TTRCore.getInstance().getCurrentMatch().getStatus() == MatchStatus.INGAME)) {
+        if (TTRCore.getInstance().enabled() && !(TTRCore.getInstance().getCurrentMatch().getStatus() == MatchStatus.INGAME)) {
             event.getPlayer().sendMessage(TTRPrefix.TTR_GAME + "" + ChatColor.RED + "You cannot place a block there!");
             event.setCancelled(true);
         }
@@ -101,7 +96,7 @@ public class EventListener implements Listener {
 
     @EventHandler
     public void breakBlockEvent(BlockBreakEvent event) {
-        if(TTRCore.getInstance().enabled() && !TTRCore.getInstance().getCurrentMatch().isOnCourse()) {
+        if (TTRCore.getInstance().enabled() && !TTRCore.getInstance().getCurrentMatch().isOnCourse()) {
             event.getPlayer().sendMessage(TTRPrefix.TTR_GAME + "" + ChatColor.RED + "You cannot break that block!");
             event.setCancelled(true);
         }
@@ -109,14 +104,14 @@ public class EventListener implements Listener {
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
-        if(TTRCore.getInstance().enabled() && TTRCore.getInstance().getCurrentMatch().isOnCourse()) {
+        if (TTRCore.getInstance().enabled() && TTRCore.getInstance().getCurrentMatch().isOnCourse()) {
             TTRCore.getInstance().getCurrentMatch().playerDeath(event.getEntity(), event.getEntity().getKiller());
         }
     }
 
     @EventHandler
     public void onPlayerDamage(EntityDamageEvent event) {
-        if(event.getEntity() instanceof Player && !(TTRCore.getInstance().getCurrentMatch().getStatus() == MatchStatus.INGAME)) {
+        if (event.getEntity() instanceof Player && !(TTRCore.getInstance().getCurrentMatch().getStatus() == MatchStatus.INGAME)) {
             event.setCancelled(true);
         }
     }

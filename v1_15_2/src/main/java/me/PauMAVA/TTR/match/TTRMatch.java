@@ -1,6 +1,6 @@
 /*
  * TheTowersRemastered (TTR)
- * Copyright (c) 2019-2020  Pau Machetti Vallverdu
+ * Copyright (c) 2019-2021  Pau Machetti Vallverdú
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,6 @@ package me.PauMAVA.TTR.match;
 
 import me.PauMAVA.TTR.TTRCore;
 import me.PauMAVA.TTR.teams.TTRTeam;
-import net.minecraft.server.v1_15_R1.Items;
 import net.minecraft.server.v1_15_R1.PacketPlayInClientCommand;
 import net.minecraft.server.v1_15_R1.PacketPlayInClientCommand.EnumClientCommand;
 import org.bukkit.*;
@@ -30,7 +29,6 @@ import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -63,9 +61,9 @@ public class TTRMatch {
         TTRCore.getInstance().getWorldHandler().configureWeather();
         TTRCore.getInstance().getWorldHandler().setWorldDifficulty(Difficulty.PEACEFUL);
         TTRCore.getInstance().getScoreboard().startScoreboardTask();
-        for(Player player: Bukkit.getServer().getOnlinePlayers()) {
+        for (Player player : Bukkit.getServer().getOnlinePlayers()) {
             TTRTeam playerTeam = TTRCore.getInstance().getTeamHandler().getPlayerTeam(player);
-            if(playerTeam == null) {
+            if (playerTeam == null) {
                 continue;
             }
             player.teleport(TTRCore.getInstance().getConfigManager().getTeamSpawn(playerTeam.getIdentifier()));
@@ -88,7 +86,7 @@ public class TTRMatch {
         this.status = MatchStatus.ENDED;
         this.lootSpawner.stopSpawning();
         TTRCore.getInstance().getScoreboard().stopScoreboardTask();
-        for(Player player: Bukkit.getServer().getOnlinePlayers()) {
+        for (Player player : Bukkit.getServer().getOnlinePlayers()) {
             player.setGameMode(GameMode.SPECTATOR);
             ChatColor teamColor = TTRCore.getInstance().getConfigManager().getTeamColor(team.getIdentifier());
             player.sendTitle(teamColor + "" + ChatColor.BOLD + team.getIdentifier(), ChatColor.AQUA + "WINS!", 10, 100, 20);
@@ -100,7 +98,7 @@ public class TTRMatch {
     }
 
     public void playerDeath(Player player, Player killer) {
-        new BukkitRunnable(){
+        new BukkitRunnable() {
             @Override
             public void run() {
                 PacketPlayInClientCommand packet = new PacketPlayInClientCommand();
@@ -114,12 +112,12 @@ public class TTRMatch {
                     e.printStackTrace();
                 }
                 TTRTeam team = TTRCore.getInstance().getTeamHandler().getPlayerTeam(player);
-                if(team != null) {
+                if (team != null) {
                     player.teleport(TTRCore.getInstance().getConfigManager().getTeamSpawn(team.getIdentifier()));
                 }
                 setPlayerArmor(player);
-                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 10 ,1);
-                player.playSound(player.getLocation(), Sound.BLOCK_GLASS_BREAK, 10 ,1);
+                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 10, 1);
+                player.playSound(player.getLocation(), Sound.BLOCK_GLASS_BREAK, 10, 1);
                 this.cancel();
                 kills.put(killer, getKills(killer) + 1);
             }
@@ -129,15 +127,15 @@ public class TTRMatch {
     private void setPlayerArmor(Player player) {
         TTRTeam team = TTRCore.getInstance().getTeamHandler().getPlayerTeam(player);
         ChatColor color;
-        if(team != null) {
+        if (team != null) {
             color = TTRCore.getInstance().getConfigManager().getTeamColor(team.getIdentifier());
         } else {
             return;
         }
         ItemStack[] armor = new ItemStack[]{new ItemStack(Material.LEATHER_BOOTS, 1), new ItemStack(Material.LEATHER_LEGGINGS, 1), new ItemStack(Material.LEATHER_CHESTPLATE, 1), new ItemStack(Material.LEATHER_HELMET, 1)};
-        for(ItemStack itemStack: armor) {
+        for (ItemStack itemStack : armor) {
             LeatherArmorMeta meta = (LeatherArmorMeta) itemStack.getItemMeta();
-            Color armorColor = Color.fromRGB(0,0,0);
+            Color armorColor = Color.fromRGB(0, 0, 0);
             try {
                 meta.setColor((Color) armorColor.getClass().getDeclaredField(color.name()).get(armorColor));
             } catch (NoSuchFieldException | IllegalAccessException e) {

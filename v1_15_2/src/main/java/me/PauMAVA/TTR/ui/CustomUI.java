@@ -1,6 +1,6 @@
 /*
  * TheTowersRemastered (TTR)
- * Copyright (c) 2019-2020  Pau Machetti Vallverdu
+ * Copyright (c) 2019-2021  Pau Machetti Vallverdú
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,19 +45,19 @@ public abstract class CustomUI {
     }
 
     void closeUI(Player player) {
-        if(player.getOpenInventory().equals(this.inventory)) {
+        if (player.getOpenInventory().equals(this.inventory)) {
             player.closeInventory();
         }
     }
 
     public void setSlot(int id, ItemStack item, @Nullable String title, @Nullable String lore) {
-        if(title == null) {
+        if (title == null) {
             this.inventory.setItem(id, item);
             return;
         }
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(title);
-        if(lore != null) {
+        if (lore != null) {
             meta.setLore(new ArrayList<String>(Arrays.asList(lore)));
         }
         item.setItemMeta(meta);

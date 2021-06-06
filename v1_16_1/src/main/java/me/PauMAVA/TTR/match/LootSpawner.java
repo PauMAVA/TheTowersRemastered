@@ -1,6 +1,6 @@
 /*
  * TheTowersRemastered (TTR)
- * Copyright (c) 2019-2020  Pau Machetti Vallverdu
+ * Copyright (c) 2019-2021  Pau Machetti Vallverdú
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,10 +21,10 @@ package me.PauMAVA.TTR.match;
 import me.PauMAVA.TTR.TTRCore;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.Material;
 
 import java.util.List;
 
@@ -53,10 +53,10 @@ public class LootSpawner {
     }
 
     private void setIronTask() {
-        this.ironTaskPID = new BukkitRunnable(){
+        this.ironTaskPID = new BukkitRunnable() {
             @Override
             public void run() {
-                for(Location location: ironLocations) {
+                for (Location location : ironLocations) {
                     Location copy = new Location(location.getWorld(), location.getX(), location.getY(), location.getZ());
                     copy.add(location.getX() > 0 ? 0.5 : 0.5, 0.0, location.getZ() > 0 ? 0.5 : -0.5);
                     location.getWorld().dropItem(copy, new ItemStack(Material.IRON_INGOT, 1));
@@ -66,10 +66,10 @@ public class LootSpawner {
     }
 
     private void setXpTask() {
-        this.xpTaskPID = new BukkitRunnable(){
+        this.xpTaskPID = new BukkitRunnable() {
             @Override
             public void run() {
-                for(Location location: xpLocations) {
+                for (Location location : xpLocations) {
                     Location copy = new Location(location.getWorld(), location.getX(), location.getY(), location.getZ());
                     copy.add(location.getX() > 0 ? 0.5 : 0.5, 0.0, location.getZ() > 0 ? 0.5 : -0.5);
                     location.getWorld().spawnEntity(copy, EntityType.THROWN_EXP_BOTTLE);

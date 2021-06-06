@@ -1,6 +1,6 @@
 /*
  * TheTowersRemastered (TTR)
- * Copyright (c) 2019-2020  Pau Machetti Vallverdu
+ * Copyright (c) 2019-2021  Pau Machetti Vallverdú
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,21 +19,21 @@
 package me.PauMAVA.TTR.ui;
 
 import io.netty.handler.codec.DecoderException;
+import me.PauMAVA.TTR.util.ReflectionUtils;
 import me.PauMAVA.TTR.util.TTRPrefix;
-import net.minecraft.server.v1_16_R1.ChatComponentText;
-import net.minecraft.server.v1_16_R1.PacketPlayOutPlayerListHeaderFooter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.craftbukkit.v1_16_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 public class TTRCustomTab extends BukkitRunnable {
 
     private String prefix = "";
-    private String suffix = ChatColor.AQUA + "(c) 2019-2020" + ChatColor.BOLD + " PauMAVA" + ChatColor.RESET + "\n" + ChatColor.GREEN + "The Towers Remastered (TTR)";
+    private String suffix = ChatColor.AQUA + "(c) 2019-2021" + ChatColor.BOLD + " PauMAVA" + ChatColor.RESET + "\n" + ChatColor.GREEN + "The Towers Remastered (TTR)";
     private int i = 1;
 
     @Override
@@ -59,18 +59,20 @@ public class TTRCustomTab extends BukkitRunnable {
     }
 
     private void sendPacket() {
-        PacketPlayOutPlayerListHeaderFooter packet = new PacketPlayOutPlayerListHeaderFooter();
         try {
+            Object packet = ReflectionUtils.createNMSInstance("PacketPlayOutPlayerListHeaderFooter", List.of(), List.of());
             Field header = packet.getClass().getDeclaredField("header");
             Field footer = packet.getClass().getDeclaredField("footer");
             header.setAccessible(true);
             footer.setAccessible(true);
-            header.set(packet, new ChatComponentText(this.prefix));
-            footer.set(packet, new ChatComponentText(this.suffix));
-            for(Player player: Bukkit.getServer().getOnlinePlayers()) {
-                ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
+            Object headerChatComponentText = ReflectionUtils.createNMSInstance("ChatComponentText", List.of(String.class), List.of(this.prefix));
+            Object footerChatComponentText = ReflectionUtils.createNMSInstance("ChatComponentText", List.of(String.class), List.of(this.suffix));
+            header.set(packet, headerChatComponentText);
+            footer.set(packet, footerChatComponentText);
+            for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+                ReflectionUtils.sendNMSPacketToPlayer(player, packet);
             }
-        } catch (IllegalAccessException | NoSuchFieldException | DecoderException e) {
+        } catch (IllegalAccessException | NoSuchFieldException | DecoderException | ClassNotFoundException | NoSuchMethodException | InvocationTargetException | InstantiationException e) {
             e.printStackTrace();
         }
     }

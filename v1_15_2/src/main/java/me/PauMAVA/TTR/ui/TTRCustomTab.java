@@ -1,6 +1,6 @@
 /*
  * TheTowersRemastered (TTR)
- * Copyright (c) 2019-2020  Pau Machetti Vallverdu
+ * Copyright (c) 2019-2021  Pau Machetti Vallverdú
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ import java.lang.reflect.Field;
 public class TTRCustomTab extends BukkitRunnable {
 
     private String prefix = "";
-    private String suffix = ChatColor.AQUA + "(c) 2019-2020" + ChatColor.BOLD + " PauMAVA" + ChatColor.RESET + "\n" + ChatColor.GREEN + "The Towers Remastered (TTR)";
+    private String suffix = ChatColor.AQUA + "(c) 2019-2021" + ChatColor.BOLD + " PauMAVA" + ChatColor.RESET + "\n" + ChatColor.GREEN + "The Towers Remastered (TTR)";
     private int i = 1;
 
     @Override
@@ -67,7 +67,7 @@ public class TTRCustomTab extends BukkitRunnable {
             footer.setAccessible(true);
             header.set(packet, new ChatComponentText(this.prefix));
             footer.set(packet, new ChatComponentText(this.suffix));
-            for(Player player: Bukkit.getServer().getOnlinePlayers()) {
+            for (Player player : Bukkit.getServer().getOnlinePlayers()) {
                 ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
             }
         } catch (IllegalAccessException | NoSuchFieldException | DecoderException e) {
