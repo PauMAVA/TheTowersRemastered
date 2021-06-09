@@ -19,6 +19,7 @@
 package me.PauMAVA.TTR.commands;
 
 import me.PauMAVA.TTR.TTRCore;
+import me.PauMAVA.TTR.lang.PluginString;
 import me.PauMAVA.TTR.util.TTRPrefix;
 import me.PauMAVA.TTR.util.XPBarTimer;
 import org.bukkit.ChatColor;
@@ -37,7 +38,7 @@ public class StartMatchCommand implements CommandExecutor {
                 try {
                     timer = Integer.parseInt(args[0]);
                 } catch (NumberFormatException e) {
-                    theSender.sendMessage(TTRPrefix.TTR_GAME + "" + ChatColor.GRAY + "You must input an integer!");
+                    theSender.sendMessage(TTRPrefix.TTR_GAME + "" + ChatColor.GRAY + PluginString.ERROR_EXPECTED_INTEGER);
                     return false;
                 }
             }

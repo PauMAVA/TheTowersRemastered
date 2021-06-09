@@ -19,6 +19,9 @@
 package me.PauMAVA.TTR.ui;
 
 import io.netty.handler.codec.DecoderException;
+import me.PauMAVA.TTR.TTRCore;
+import me.PauMAVA.TTR.lang.Locale;
+import me.PauMAVA.TTR.lang.PluginString;
 import me.PauMAVA.TTR.util.ReflectionUtils;
 import me.PauMAVA.TTR.util.TTRPrefix;
 import org.bukkit.Bukkit;
@@ -32,9 +35,20 @@ import java.util.List;
 
 public class TTRCustomTab extends BukkitRunnable {
 
-    private String prefix = "";
-    private String suffix = ChatColor.AQUA + "(c) 2019-2021" + ChatColor.BOLD + " PauMAVA" + ChatColor.RESET + "\n" + ChatColor.GREEN + "The Towers Remastered (TTR)";
-    private int i = 1;
+    private String prefix;
+    private String suffix;
+    private int i;
+
+    public TTRCustomTab(TTRCore plugin) {
+        this.prefix = "";
+        this.suffix = ChatColor.AQUA + "(c) 2019-2021" + ChatColor.BOLD + " PauMAVA";
+        this.i = 1;
+        Locale locale = plugin.getLanguageManager().getSelectedLocale();
+        if (!locale.getShortName().equalsIgnoreCase("unknown") && !locale.getShortName().equalsIgnoreCase("en")) {
+            this.suffix += ChatColor.RESET + "" + ChatColor.GREEN + "\n" + PluginString.TRANSLATION_MADE_BY + ChatColor.BOLD + "" + ChatColor.GREEN + locale.getAuthor();
+        }
+        this.suffix += ChatColor.RESET + "\n" + ChatColor.GREEN + "The Towers Remastered (TTR)";
+    }
 
     @Override
     public void run() {

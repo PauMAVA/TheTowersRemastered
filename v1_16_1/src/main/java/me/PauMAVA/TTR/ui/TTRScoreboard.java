@@ -1,6 +1,7 @@
 package me.PauMAVA.TTR.ui;
 
 import me.PauMAVA.TTR.TTRCore;
+import me.PauMAVA.TTR.lang.PluginString;
 import me.PauMAVA.TTR.teams.TTRTeam;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -53,7 +54,7 @@ public class TTRScoreboard {
                 if (totalTime != null) {
                     ttrScoreboard.resetScores(totalTime.getEntry());
                 }
-                totalTime = points.getScore(ChatColor.GREEN + "" + ChatColor.BOLD + "Total time: " + ChatColor.GRAY + prettyTime(i));
+                totalTime = points.getScore(ChatColor.GREEN + "" + ChatColor.BOLD + PluginString.TOTAL_TIME_LABEL + ChatColor.GRAY + prettyTime(i));
                 totalTime.setScore(-2);
                 i++;
                 refreshScoreboard();

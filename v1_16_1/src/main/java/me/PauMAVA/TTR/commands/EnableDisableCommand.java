@@ -19,6 +19,7 @@
 package me.PauMAVA.TTR.commands;
 
 import me.PauMAVA.TTR.TTRCore;
+import me.PauMAVA.TTR.lang.PluginString;
 import me.PauMAVA.TTR.util.TTRPrefix;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -37,10 +38,10 @@ public class EnableDisableCommand implements CommandExecutor {
     public boolean onCommand(CommandSender theSender, Command cmd, String label, String[] args) {
         if (label.equalsIgnoreCase("ttrenable")) {
             plugin.getConfigManager().setEnableOnStart(true);
-            theSender.sendMessage(TTRPrefix.TTR_GAME + "" + ChatColor.GREEN + "Plugin enabled on server start. /reload or restart server to apply changes! Players should rejoin...");
+            theSender.sendMessage(TTRPrefix.TTR_GAME + "" + ChatColor.GREEN + PluginString.TTR_ENABLE_OUTPUT);
         } else if (label.equalsIgnoreCase("ttrdisable")) {
             plugin.getConfigManager().setEnableOnStart(false);
-            theSender.sendMessage(TTRPrefix.TTR_GAME + "" + ChatColor.RED + "Plugin disabled on server start. /reload or restart server to apply changes!");
+            theSender.sendMessage(TTRPrefix.TTR_GAME + "" + ChatColor.RED + PluginString.TTR_DISABLE_OUTPUT);
         }
         return false;
     }

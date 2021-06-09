@@ -126,6 +126,10 @@ public class TTRConfigManager {
         saveConfig();
     }
 
+    public String getLocale() {
+        return this.configuration.getString("locale");
+    }
+
     private void saveConfig() {
         TTRCore.getInstance().saveConfig();
     }
@@ -136,6 +140,7 @@ public class TTRConfigManager {
 
     private void setUpFile() {
         this.configuration.addDefault("enable_on_start", false);
+        this.configuration.addDefault("locale", "en");
         this.autoStartSection = this.configuration.createSection("autostart");
         autoStartSection.addDefault("enabled", true);
         autoStartSection.addDefault("count", 4);

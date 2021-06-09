@@ -18,6 +18,7 @@
 
 package me.PauMAVA.TTR.util;
 
+import io.netty.channel.Channel;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -50,6 +51,18 @@ public class ReflectionUtils {
         return playerConnectionField.get(playerHandle);
     }
 
+    public static Channel getPlayerChannel(Player player) throws NoSuchFieldException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+        Object playerConnection = getPlayerConnection(player);
+        Field networkManagerField = playerConnection.getClass().getDeclaredField("networkManager");
+        Object networkManager = networkManagerField.get(playerConnection);
+        Field playerChannelField = networkManager.getClass().getDeclaredField("channel");
+        Object playerChannel = playerChannelField.get(networkManager);
+        if (playerChannel instanceof Channel) {
+            return (Channel) playerChannel;
+        }
+        throw new NoSuchFieldException("No field channel with type io.netty.channel.Channel in player network manager...");
+    }
+
     public static void sendNMSPacketToPlayer(Player player, Object packet) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, NoSuchFieldException {
         Object playerConnection = getPlayerConnection(player);
         Class<?> nmsPacket = getNMSClass("Packet");
@@ -78,6 +91,13 @@ public class ReflectionUtils {
         field.setAccessible(true);
         field.set(instance, value);
         field.setAccessible(accessible);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> T callMethod(Object instance, String name, List<Class<?>> paramTypes, List<Object> parameters, Class<T> returnValue) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        Method method = instance.getClass().getDeclaredMethod(name, paramTypes.toArray(new Class[0]));
+        method.setAccessible(true);
+        return (T) method.invoke(instance, parameters);
     }
 
 }
