@@ -11,6 +11,15 @@
 lang: en
 ###############################################
 
+# These are the chat prefixes, they contain minecraft color codes specified by & and the code character or number.
+# For a list of chat color codes see https://www.colorschemer.com/minecraft-color-codes/
+chat:
+  game_prefix: "&7&l[&r&a&lThe Towers&r&7&l]&r "
+  game_prefix_dark: "&7&l[&r&2&lThe Towers&r&7&l]&r "
+  global_prefix: "&7&l[&r&5&lGLOBAL&r&7&l]&r "
+  team_prefix: "&7&l[&r&b&lTEAM&r&7&l]&r "
+
+
 command:
   on_plugin_enable: "Plugin enabled on server start. /reload or restart server to apply changes! Players should rejoin..."
   on_plugin_disable: "Plugin disabled on server start. /reload or restart server to apply changes!"

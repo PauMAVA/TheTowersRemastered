@@ -76,8 +76,12 @@ public class LanguageManager {
     }
 
     public String getString(PluginString string) {
-        if (this.languageFile.isSet(string.getPath())) {
-            String unprocessed = this.languageFile.getString(string.getPath());
+        return getStringByPath(string.getPath());
+    }
+
+    public String getStringByPath(String path) {
+        if (this.languageFile.isSet(path)) {
+            String unprocessed = this.languageFile.getString(path);
             if (unprocessed == null) {
                 return "";
             }

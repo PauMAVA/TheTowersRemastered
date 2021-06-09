@@ -33,10 +33,10 @@
     <name>TheTowersRemastered [1.16.1]</name>
 
     <build>
-        <sourceDirectory>src</sourceDirectory>
+        <sourceDirectory>src/main/java</sourceDirectory>
         <resources>
             <resource>
-                <directory>src</directory>
+                <directory>src/main/resources</directory>
                 <includes>
                     <include>**/*.yml</include>
                 </includes>

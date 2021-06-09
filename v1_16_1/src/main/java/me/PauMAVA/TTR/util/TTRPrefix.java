@@ -18,24 +18,24 @@
 
 package me.PauMAVA.TTR.util;
 
-import org.bukkit.ChatColor;
+import me.PauMAVA.TTR.TTRCore;
 
 public enum TTRPrefix {
 
-    TTR_GAME(ChatColor.GRAY + "" + ChatColor.BOLD + "[" + ChatColor.RESET + ChatColor.GREEN + "" + ChatColor.BOLD + "The Towers" + ChatColor.RESET + ChatColor.GRAY + "" + ChatColor.BOLD + "]" + ChatColor.RESET + " "),
-    TTR_GAME_DARK(ChatColor.GRAY + "" + ChatColor.BOLD + "[" + ChatColor.RESET + ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "The Towers" + ChatColor.RESET + ChatColor.GRAY + "" + ChatColor.BOLD + "]" + ChatColor.RESET + " "),
-    TTR_GLOBAL(ChatColor.GRAY + "" + ChatColor.BOLD + "[" + ChatColor.RESET + ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "GLOBAL" + ChatColor.RESET + ChatColor.GRAY + "" + ChatColor.BOLD + "]" + ChatColor.RESET + " "),
-    TTR_TEAM(ChatColor.GRAY + "" + ChatColor.BOLD + "[" + ChatColor.RESET + ChatColor.GREEN + "" + ChatColor.BOLD + "TEAM" + ChatColor.RESET + ChatColor.GRAY + "" + ChatColor.BOLD + "]" + ChatColor.RESET + " ");
+    TTR_GAME("chat.game_prefix"),
+    TTR_GAME_DARK("chat.game_prefix_dark"),
+    TTR_GLOBAL("chat.global_prefix"),
+    TTR_TEAM("chat.team_prefix");
 
-    private String prefix;
+    private final String path;
 
-    TTRPrefix(String prefix) {
-        this.prefix = prefix;
+    TTRPrefix(String path) {
+        this.path = path;
     }
 
     @Override
     public String toString() {
-        return this.prefix;
+        return TTRCore.getInstance().getLanguageManager().getStringByPath(this.path);
     }
 
 }
